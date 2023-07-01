@@ -3,13 +3,16 @@ package app
 import (
 	"fmt"
 
+	"github.com/jinzhu/gorm"
 	"github.com/pratikstemkar/matchup/internal/database"
 	"github.com/pratikstemkar/matchup/internal/transport/rest"
 	"github.com/pratikstemkar/matchup/internal/utils"
 )
 
+var DB *gorm.DB
+
 func init(){
-	database.ConnectDB()
+	DB = database.ConnectDB()
 }
 
 func App() {
@@ -17,4 +20,6 @@ func App() {
 
 	r := rest.SetupRouter()
 	r.Run(":"+utils.GetEnvVariable("PORT"))
+
+	defer DB.Close()
 }
