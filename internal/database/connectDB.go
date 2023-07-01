@@ -10,6 +10,8 @@ import (
 	"github.com/pratikstemkar/matchup/internal/utils"
 )
 
+var DB *gorm.DB
+
 func ConnectDB() *gorm.DB {
 	var (
 		host     = utils.GetEnvVariable("DB_HOST")
@@ -29,7 +31,7 @@ func ConnectDB() *gorm.DB {
 
    DB, err := gorm.Open("postgres", conn)
    if err != nil {
-	log.Fatalf("Postgres connection failed: %v", err)
+	log.Printf("Postgres connection failed: %v", err)
    }
 
    // Execute SQL command to enable the UUID extension
