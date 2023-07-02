@@ -10,6 +10,7 @@ import (
 type User struct {
 	User_Id uuid.UUID `json:"user_id" gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
 	Username string `json:"username" gorm:"unique"`
+	Email string `json:"email" gorm:"unique"`
 	Password string `json:"password"`
 	Pfp_Url string `json:"pfp_url"`
 	Roles []Role `json:"roles" gorm:"many2many:user_roles;constraint:OnDelete:CASCADE;"`
