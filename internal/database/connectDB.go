@@ -11,6 +11,7 @@ import (
 )
 
 var DB *gorm.DB
+var err error
 
 func ConnectDB() *gorm.DB {
 	var (
@@ -29,7 +30,7 @@ func ConnectDB() *gorm.DB {
        password,
    )
 
-   DB, err := gorm.Open("postgres", conn)
+   DB, err = gorm.Open("postgres", conn)
    if err != nil {
 	log.Printf("Postgres connection failed: %v", err)
    }

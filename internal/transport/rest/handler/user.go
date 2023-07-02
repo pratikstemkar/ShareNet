@@ -1,4 +1,4 @@
-package handlers
+package handler
 
 import (
 	"fmt"
@@ -56,7 +56,7 @@ func GetUser(c *gin.Context) {
 // @access Public
 func GetUserList(c *gin.Context) {
 	userList, err := database.ReadUserList()
-	fmt.Println("user kist now")
+	fmt.Println("user list now")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
