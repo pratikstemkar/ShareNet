@@ -8,21 +8,20 @@ import (
 	"github.com/pratikstemkar/matchup/internal/models"
 )
 
-// TODO: Make all routes private
+// TODO: Make al routes private
 
-// @route POST /api/v1/user
-// @desc Create a new user
+// @route POST /api/v1/role
+// @desc Create a new role
 // @access Public
-func PostUser(c *gin.Context) {
-	var user models.User
-	if err := c.ShouldBindJSON(&user); err != nil {
+func PostRole(c *gin.Context) {
+	var role models.Role
+	if err := c.ShouldBindJSON(&role); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err,
 		})
 		return
 	}
-	
-	res, err := database.CreateUser(&user)
+	res, err := database.CreateRole(&role)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
@@ -30,32 +29,32 @@ func PostUser(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{
-		"user": res,
+		"role": res,
 	})
 }
 
-// @route GET /api/v1/user/:id
-// @desc Read a user by id
+// @route GET /api/v1/role/:id
+// @desc Read a role by id
 // @access Public
-func GetUser(c *gin.Context) {
+func GetRole(c *gin.Context) {
 	id := c.Param("id")
-	user, err := database.ReadUser(id)
+	role, err := database.ReadRole(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
-			"error": "user not found",
+			"error": "role not found",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"user": user,
+		"role": role,
 	})
 }
 
-// @route GET /api/v1/user
-// @desc Read all users
+// @route GET /api/v1/role
+// @desc Read all roles
 // @access Public
-func GetUserList(c *gin.Context) {
-	userList, err := database.ReadUserList()
+func GetRoleList(c *gin.Context) {
+	roleList, err := database.ReadRoleList()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
@@ -63,22 +62,22 @@ func GetUserList(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"user_list": userList,
+		"role_list": roleList,
 	})
 }
 
-// @route PUT /api/v1/user/:id
-// @desc Update user by id
+// @route PUT /api/v1/role/:id
+// @desc Update role by id
 // @access Public
-func PutUser(c *gin.Context) {
-	var user models.User
-	if err := c.ShouldBindJSON(&user); err != nil {
+func PutRole(c *gin.Context) {
+	var role models.Role
+	if err := c.ShouldBindJSON(&role); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
 		})
 		return
 	}
-	res, err := database.UpdateUser(&user)
+	res, err := database.UpdateRole(&role)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
@@ -86,23 +85,23 @@ func PutUser(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{
-		"updated_user": res,
+		"updated_role": res,
 	})
 }
 
-// @route DELETE /api/v1/user/:id
-// @desc Delete a user by id
+// @route DELETE /api/v1/role/:id
+// @desc Delete a role by id
 // @access Public
-func DeleteUser(c *gin.Context) {
+func DeleteRole(c *gin.Context) {
 	id := c.Param("id")
-	err := database.DeleteUser(id)
+	err := database.DeleteRole(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
-			"error": "user not found",
+			"error": "role not found",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "user deleted successfuly",
+		"message": "role deleted successfuly",
 	})
 }

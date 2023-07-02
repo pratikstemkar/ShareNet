@@ -2,12 +2,24 @@ package database
 
 import (
 	"errors"
+	"fmt"
 
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/pratikstemkar/matchup/internal/models"
 )
 
 func CreateUser(user *models.User) (*models.User, error) {
+	// fmt.Println("User roles:")
+	roles_copy := user.Roles
+	user.Roles = []models.Role{}
+	for _, user_role := range roles_copy {
+		// fmt.Println(user_role.Rolename)
+		var role models.Role
+		DB.FirstOrCreate(&role, user_role)
+		user.Roles = append(user.Roles, role)
+		// fmt.Print(role)
+	}
+	fmt.Print(user)
 	res := DB.Create(user)
 	if res.RowsAffected == 0 {
 		return &models.User{}, errors.New("user not created")

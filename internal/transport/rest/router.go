@@ -17,5 +17,12 @@ func SetupRouter() *gin.Engine {
 	r.PUT("/api/v1/user", handler.PutUser)
 	r.DELETE("/api/v1/user/:id", handler.DeleteUser)
 
+	// ROLE
+	r.POST("/api/v1/role", handler.PostRole)
+	r.GET("/api/v1/role/:id", handler.GetRole)
+	r.GET("/api/v1/role", handler.GetRoleList)
+	r.PUT("/api/v1/role", handler.PutRole)
+	r.DELETE("/api/v1/role/:id", handler.DeleteRole)
+
 	return r
 }
