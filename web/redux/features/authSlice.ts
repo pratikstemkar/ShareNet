@@ -9,8 +9,9 @@ type AuthState = {
 	isAuth: boolean;
 	username: string | null;
 	email: string;
-	uid: string;
-	isAdmin: boolean;
+	user_id: string;
+	pfp_url: string;
+	roles: Array<string>;
 };
 
 const initialState = {
@@ -18,8 +19,9 @@ const initialState = {
 		isAuth: false,
 		username: "",
 		email: "",
-		uid: "",
-		isAdmin: false,
+		user_id: "",
+		pfp_url: "",
+		roles: [],
 	} as AuthState,
 } as InitialState;
 
@@ -37,8 +39,10 @@ export const auth = createSlice({
 					isAuth: true,
 					username: getUsernameFromEmail(action.payload),
 					email: action.payload,
-					uid: "asdasd",
-					isAdmin: false,
+					user_id: "asdasd",
+					pfp_url:
+						"https://pbs.twimg.com/profile_images/1675393092093091840/_jdt3xa5_400x400.jpg",
+					roles: ["user", "pro"],
 				},
 			};
 		},
