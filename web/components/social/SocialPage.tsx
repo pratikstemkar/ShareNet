@@ -77,7 +77,7 @@ export default function SocialPage() {
 											India
 										</Link>
 									</HoverCardTrigger>
-									<HoverCardContent className="w-80">
+									<HoverCardContent className="w-80 hover:cursor-default">
 										<div className="flex justify-between space-x-4">
 											<Avatar>
 												<AvatarImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU" />
