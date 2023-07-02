@@ -17,7 +17,7 @@ func CreateRole(role *models.Role) (*models.Role, error) {
 
 func ReadRole(role_id string) (*models.Role, error) {
 	var role models.Role
-	res := DB.First(&role, "role_id = ?", role_id)
+	res := DB.Preload("Users").Find(&role, "role_id = ?", role_id)
 	if res.RowsAffected == 0 {
 		return nil, errors.New("role not found")
 	}
@@ -26,7 +26,7 @@ func ReadRole(role_id string) (*models.Role, error) {
 
 func ReadRoleList() ([]*models.Role, error) {
 	var roleList []*models.Role
-	res := DB.Find(&roleList)
+	res := DB.Preload("Users").Find(&roleList)
 	if res.Error != nil {
 		return nil, errors.New("role list not found")
 	}
