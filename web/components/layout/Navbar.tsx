@@ -27,7 +27,7 @@ const Navbar = () => {
 						/>
 					</Link>
 					<Link href="/">{process.env.NEXT_PUBLIC_APP_NAME}</Link>
-					{roles?.includes("pro") ? (
+					{isAuth && roles?.includes("pro") ? (
 						<sup>
 							<Badge className="h-4 ml-1">PRO</Badge>
 						</sup>

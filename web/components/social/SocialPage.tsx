@@ -33,35 +33,41 @@ import {
 import PostCard from "./PostCard";
 import { Skeleton } from "../ui/skeleton";
 import PostCardSkeleton from "./PostCardSkeleton";
+import { useAppSelector } from "@/redux/store";
 
 export default function SocialPage() {
 	const router = useRouter();
+
+	const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
+	const roles = useAppSelector((state) => state.authReducer.value.roles);
 
 	const { data, isSuccess, isError, isLoading } = useGetAllPostsQuery("");
 
 	return (
 		<div className="grid grid-cols-4 gap-5">
 			<div className="col-span-3 space-y-5">
-				<Card>
-					{/* <CardHeader className="font-bold">Create Post</CardHeader> */}
-					<CardContent className="mt-5">
-						<div className="flex space-x-2 items-center">
-							<Avatar className="h-8 w-8 mr-2">
-								<AvatarImage
-									src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
-									alt="ProfilePicture"
+				{isAuth ? (
+					<Card>
+						{/* <CardHeader className="font-bold">Create Post</CardHeader> */}
+						<CardContent className="mt-5">
+							<div className="flex space-x-2 items-center">
+								<Avatar className="h-8 w-8 mr-2">
+									<AvatarImage
+										src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
+										alt="ProfilePicture"
+									/>
+									<AvatarFallback>PC</AvatarFallback>
+								</Avatar>
+								<Input
+									placeholder="Create Post"
+									className="dark:hover:border-white hover:border-black"
+									onClick={() => router.push("/post/submit")}
 								/>
-								<AvatarFallback>PC</AvatarFallback>
-							</Avatar>
-							<Input
-								placeholder="Create Post"
-								className="dark:hover:border-white hover:border-black"
-								onClick={() => router.push("/post/submit")}
-							/>
-							<Button size="sm">Post</Button>
-						</div>
-					</CardContent>
-				</Card>
+								<Button size="sm">Post</Button>
+							</div>
+						</CardContent>
+					</Card>
+				) : null}
 				<div className="space-y-5">
 					{isLoading ? (
 						<PostCardSkeleton />
@@ -71,21 +77,23 @@ export default function SocialPage() {
 				</div>
 			</div>
 			<div className="space-y-5">
-				<Card>
-					<CardHeader className="font-semibold">
-						Try {process.env.NEXT_PUBLIC_APP_NAME} PRO!
-					</CardHeader>
-					<CardContent className="text-sm">
-						Create your own team and much more.
-					</CardContent>
-					<CardFooter>
-						<Link href="/pro" className="w-full">
-							<Button className="w-full" size="sm">
-								Try Now
-							</Button>
-						</Link>
-					</CardFooter>
-				</Card>
+				{isAuth && roles?.includes("pro") ? null : (
+					<Card>
+						<CardHeader className="font-semibold">
+							Try {process.env.NEXT_PUBLIC_APP_NAME} PRO!
+						</CardHeader>
+						<CardContent className="text-sm">
+							Create your own team and much more.
+						</CardContent>
+						<CardFooter>
+							<Link href="/pro" className="w-full">
+								<Button className="w-full" size="sm">
+									Try Now
+								</Button>
+							</Link>
+						</CardFooter>
+					</Card>
+				)}
 				<Card>
 					<CardHeader className="font-semibold">
 						Welcome to {process.env.NEXT_PUBLIC_APP_NAME}!

@@ -35,6 +35,10 @@ import {
 import Link from "next/link";
 import { Separator } from "../ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import {
+	useGetPostCommentsQuery,
+	useGetPostQuery,
+} from "@/redux/features/apiSlice";
 
 const FormSchema = z.object({
 	comment: z
@@ -47,8 +51,12 @@ const FormSchema = z.object({
 		}),
 });
 
-const PostPage = () => {
+const PostPage = (props: { postId: string }) => {
 	const { toast } = useToast();
+
+	const { data: post, isSuccess: postSuccess } = useGetPostQuery(props.postId);
+	const { data: comments, isSuccess: commentsSuccess } =
+		useGetPostCommentsQuery(props.postId);
 
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
@@ -69,211 +77,135 @@ const PostPage = () => {
 		<main className="max-w-5xl m-auto mt-5">
 			<div className="grid grid-cols-6 gap-5">
 				<div className="col-span-4">
-					<Card>
-						<CardHeader>
-							<div className="text-sm text-slate-500">
-								Posted by{" "}
-								<Link href="/profile" className="hover:underline mr-2">
-									username
-								</Link>
-								<span className="text-sm">4 Hours ago</span>
-							</div>
-							<CardTitle>Post Title</CardTitle>
-						</CardHeader>
-						<CardContent className="space-y-5">
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui,
-								mollitia quae quos voluptate quasi ullam commodi repudiandae
-								labore saepe dicta ipsa rerum modi ab eaque distinctio accusamus
-								maiores nulla nostrum?
-							</p>
-							<div className="flex">
-								<Button variant="ghost" size="sm">
-									24
-									<ThumbsUpIcon className="h-4 w-4 ml-2" />
-								</Button>
-								<Button variant="ghost" size="sm">
-									0
-									<ThumbsDownIcon className="h-4 w-4 ml-2" />
-								</Button>
-								<Button variant="ghost" size="sm">
-									<ForwardIcon className="h-4 w-4 mr-2" />
-									Share
-								</Button>
-								<Button variant="ghost" size="sm">
-									<SaveIcon className="h-4 w-4 mr-2" />
-									Save
-								</Button>
-								<Button variant="ghost" size="sm">
-									<MoreHorizontalIcon className="h-4 w-4" />
-								</Button>
-							</div>
-							<div>
-								<Form {...form}>
-									<form
-										onSubmit={form.handleSubmit(onSubmit)}
-										className="w-full space-y-2"
-									>
-										<FormField
-											control={form.control}
-											name="comment"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Comment</FormLabel>
-													<FormControl>
-														<Textarea
-															placeholder="What are your thoughts?"
-															className="resize-none"
-															rows={5}
-															{...field}
-														/>
-													</FormControl>
-													<FormDescription>
-														You can <span>@mention</span> other users and teams.
-													</FormDescription>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-										<Button type="submit">Comment</Button>
-									</form>
-								</Form>
-							</div>
-							<Separator />
-							<div className="space-y-5">
-								<h4 className="text-lg font-semibold">24 Comments</h4>
-								<div className="space-y-2">
-									<div className="flex items-center">
-										<Avatar className="h-8 w-8 mr-2">
-											<AvatarImage
-												src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
-												alt="ProfilePicture"
-											/>
-											<AvatarFallback>PF</AvatarFallback>
-										</Avatar>
-										<Link href="/profile" className="mr-2 hover:underline">
-											username
-										</Link>
-										<span className="text-sm text-slate-500">4 Hours ago</span>
-									</div>
-									<p className="text-sm">
-										Lorem ipsum dolor sit amet consectetur adipisicing elit.
-										Sapiente vero amet, ut, quisquam labore pariatur ipsa facere
-										deserunt natus explicabo dolore alias doloribus voluptatem
-										eaque ullam doloremque culpa tempore! Repellendus!
-									</p>
-									<div className="flex">
-										<Button variant="ghost" size="sm">
-											24
-											<ThumbsUpIcon className="h-4 w-4 ml-2" />
-										</Button>
-										<Button variant="ghost" size="sm">
-											0
-											<ThumbsDownIcon className="h-4 w-4 ml-2" />
-										</Button>
-										<Button variant="ghost" size="sm">
-											<ReplyIcon className="h-4 w-4 mr-2" />
-											Reply
-										</Button>
-										<Button variant="ghost" size="sm">
-											<ForwardIcon className="h-4 w-4 mr-2" />
-											Share
-										</Button>
-
-										<Button variant="ghost" size="sm">
-											<MoreHorizontalIcon className="h-4 w-4" />
-										</Button>
-									</div>
+					{postSuccess ? (
+						<Card>
+							<CardHeader>
+								<div className="text-sm text-slate-500">
+									Posted by{" "}
+									<Link href="/profile" className="hover:underline mr-2">
+										user{post.userId}
+									</Link>
+									<span className="text-sm">4 Hours ago</span>
 								</div>
-								<div className="space-y-2">
-									<div className="flex items-center">
-										<Avatar className="h-8 w-8 mr-2">
-											<AvatarImage
-												src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
-												alt="ProfilePicture"
-											/>
-											<AvatarFallback>PF</AvatarFallback>
-										</Avatar>
-										<Link href="/profile" className="mr-2 hover:underline">
-											username
-										</Link>
-										<span className="text-sm text-slate-500">4 Hours ago</span>
-									</div>
-									<p className="text-sm">
-										Lorem ipsum dolor sit amet consectetur adipisicing elit.
-										Sapiente vero amet, ut, quisquam labore pariatur ipsa facere
-										deserunt natus explicabo dolore alias doloribus voluptatem
-										eaque ullam doloremque culpa tempore! Repellendus!
-									</p>
-									<div className="flex">
-										<Button variant="ghost" size="sm">
-											24
-											<ThumbsUpIcon className="h-4 w-4 ml-2" />
-										</Button>
-										<Button variant="ghost" size="sm">
-											0
-											<ThumbsDownIcon className="h-4 w-4 ml-2" />
-										</Button>
-										<Button variant="ghost" size="sm">
-											<ReplyIcon className="h-4 w-4 mr-2" />
-											Reply
-										</Button>
-										<Button variant="ghost" size="sm">
-											<ForwardIcon className="h-4 w-4 mr-2" />
-											Share
-										</Button>
-
-										<Button variant="ghost" size="sm">
-											<MoreHorizontalIcon className="h-4 w-4" />
-										</Button>
-									</div>
+								<CardTitle>{post.title}</CardTitle>
+							</CardHeader>
+							<CardContent className="space-y-5">
+								<p>{post.body}</p>
+								<div className="flex">
+									<Button variant="ghost" size="sm">
+										{post.reactions}
+										<ThumbsUpIcon className="h-4 w-4 ml-2" />
+									</Button>
+									<Button variant="ghost" size="sm">
+										0
+										<ThumbsDownIcon className="h-4 w-4 ml-2" />
+									</Button>
+									<Button variant="ghost" size="sm">
+										<ForwardIcon className="h-4 w-4 mr-2" />
+										Share
+									</Button>
+									<Button variant="ghost" size="sm">
+										<SaveIcon className="h-4 w-4 mr-2" />
+										Save
+									</Button>
+									<Button variant="ghost" size="sm">
+										<MoreHorizontalIcon className="h-4 w-4" />
+									</Button>
 								</div>
-								<div className="space-y-2">
-									<div className="flex items-center">
-										<Avatar className="h-8 w-8 mr-2">
-											<AvatarImage
-												src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
-												alt="ProfilePicture"
+								<div>
+									<Form {...form}>
+										<form
+											onSubmit={form.handleSubmit(onSubmit)}
+											className="w-full space-y-2"
+										>
+											<FormField
+												control={form.control}
+												name="comment"
+												render={({ field }) => (
+													<FormItem>
+														<FormLabel>Comment</FormLabel>
+														<FormControl>
+															<Textarea
+																placeholder="What are your thoughts?"
+																className="resize-none"
+																rows={5}
+																{...field}
+															/>
+														</FormControl>
+														<FormDescription>
+															You can <span>@mention</span> other users and
+															teams.
+														</FormDescription>
+														<FormMessage />
+													</FormItem>
+												)}
 											/>
-											<AvatarFallback>PF</AvatarFallback>
-										</Avatar>
-										<Link href="/profile" className="mr-2 hover:underline">
-											username
-										</Link>
-										<span className="text-sm text-slate-500">4 Hours ago</span>
-									</div>
-									<p className="text-sm">
-										Lorem ipsum dolor sit amet consectetur adipisicing elit.
-										Sapiente vero amet, ut, quisquam labore pariatur ipsa facere
-										deserunt natus explicabo dolore alias doloribus voluptatem
-										eaque ullam doloremque culpa tempore! Repellendus!
-									</p>
-									<div className="flex">
-										<Button variant="ghost" size="sm">
-											24
-											<ThumbsUpIcon className="h-4 w-4 ml-2" />
-										</Button>
-										<Button variant="ghost" size="sm">
-											0
-											<ThumbsDownIcon className="h-4 w-4 ml-2" />
-										</Button>
-										<Button variant="ghost" size="sm">
-											<ReplyIcon className="h-4 w-4 mr-2" />
-											Reply
-										</Button>
-										<Button variant="ghost" size="sm">
-											<ForwardIcon className="h-4 w-4 mr-2" />
-											Share
-										</Button>
-
-										<Button variant="ghost" size="sm">
-											<MoreHorizontalIcon className="h-4 w-4" />
-										</Button>
-									</div>
+											<Button type="submit">Comment</Button>
+										</form>
+									</Form>
 								</div>
-							</div>
-						</CardContent>
-					</Card>
+								<Separator />
+								<div className="space-y-5">
+									{commentsSuccess ? (
+										<>
+											<h4 className="text-lg font-semibold">
+												{comments.total} Comments
+											</h4>
+											{comments?.comments.map((comment: any) => (
+												<div className="space-y-2" key={comment.id}>
+													<div className="flex items-center">
+														<Avatar className="h-8 w-8 mr-2">
+															<AvatarImage
+																src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
+																alt="ProfilePicture"
+															/>
+															<AvatarFallback>PF</AvatarFallback>
+														</Avatar>
+														<Link
+															href="/profile"
+															className="mr-2 hover:underline"
+														>
+															{comment.user.username}
+														</Link>
+														<span className="text-sm text-slate-500">
+															4 Hours ago
+														</span>
+													</div>
+													<p className="text-sm">{comment.body}</p>
+													<div className="flex">
+														<Button variant="ghost" size="sm">
+															24
+															<ThumbsUpIcon className="h-4 w-4 ml-2" />
+														</Button>
+														<Button variant="ghost" size="sm">
+															0
+															<ThumbsDownIcon className="h-4 w-4 ml-2" />
+														</Button>
+														<Button variant="ghost" size="sm">
+															<ReplyIcon className="h-4 w-4 mr-2" />
+															Reply
+														</Button>
+														<Button variant="ghost" size="sm">
+															<ForwardIcon className="h-4 w-4 mr-2" />
+															Share
+														</Button>
+
+														<Button variant="ghost" size="sm">
+															<MoreHorizontalIcon className="h-4 w-4" />
+														</Button>
+													</div>
+												</div>
+											))}
+										</>
+									) : (
+										<>Loading...</>
+									)}
+								</div>
+							</CardContent>
+						</Card>
+					) : (
+						<>Loading...</>
+					)}
 				</div>
 				<div className="col-span-2">
 					<Card>
