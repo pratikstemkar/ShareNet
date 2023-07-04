@@ -16,7 +16,16 @@ export const authApi = createApi({
 				};
 			},
 		}),
+		readUser: builder.query({
+			query: (email: string) => {
+				return {
+					url: `api/v1/user/email/${email}`,
+					method: "GET",
+				};
+			},
+		}),
 	}),
 });
 
-export const { useLoginUserMutation } = authApi;
+export const { useLoginUserMutation, useReadUserQuery, useLazyReadUserQuery } =
+	authApi;

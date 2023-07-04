@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons/icons";
-import { logIn } from "@/redux/features/authSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { useRouter } from "next/navigation";
@@ -30,14 +29,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
-import { useLoginUserMutation } from "@/redux/features/authApi";
+import {
+	useLazyReadUserQuery,
+	useLoginUserMutation,
+	useReadUserQuery,
+} from "@/redux/features/authApi";
+import { useEffect, useState } from "react";
+import { setUser } from "@/redux/features/authSlice";
+import { data } from "autoprefixer";
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50).email(),
-	password: z.string().min(8).max(18),
+	password: z.string().min(5).max(18),
 });
 
 export function LoginForm() {
+	const [skip, setSkip] = useState(true);
+	const [email, setEmail] = useState("");
+	const [xdata, setXdata] = useState(null);
 	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
 	const { toast } = useToast();
@@ -50,6 +59,14 @@ export function LoginForm() {
 			isError: loginError,
 		},
 	] = useLoginUserMutation();
+	const {
+		data: userData,
+		isSuccess: userSuccess,
+		isError: userError,
+		isLoading: userLoading,
+	} = useReadUserQuery(email, { skip });
+
+	const [trigger, results] = useLazyReadUserQuery();
 
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -67,11 +84,28 @@ export function LoginForm() {
 
 		if (values.email && values.password) {
 			loginUser({ email: values.email, password: values.password });
+			trigger(values.email);
 		}
+	}
 
+	useEffect(() => {
 		if (loginSuccess) {
-			console.log(values);
-			dispatch(logIn(values.email));
+			if (results && results.data) {
+				setXdata(results.data);
+				console.log(results.data);
+				dispatch(
+					setUser({
+						username: results.data.user.username,
+						email: results.data.user.email,
+						user_id: results.data.user.user_id,
+						pfp_url: results.data.user.pfp_url,
+						access_token: loginData.access_token,
+						refresh_token: loginData.refresh_token,
+						roles: results.data.user.roles.map((obj: any) => obj.rolename),
+					})
+				);
+			}
+
 			router.push("/");
 			toast({
 				title: "Logged In Successfully!",
@@ -83,7 +117,7 @@ export function LoginForm() {
 				title: "Login Failed!",
 			});
 		}
-	}
+	}, [loginLoading]);
 
 	return (
 		<Card>

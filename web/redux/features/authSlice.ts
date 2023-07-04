@@ -8,10 +8,12 @@ type InitialState = {
 type AuthState = {
 	isAuth: boolean;
 	username: string | null;
-	email: string;
-	user_id: string;
-	pfp_url: string;
-	roles: Array<string>;
+	email: string | null;
+	user_id: string | null;
+	pfp_url: string | null;
+	access_token: string | null;
+	refresh_token: string | null;
+	roles: Array<string> | null;
 };
 
 const initialState = {
@@ -21,6 +23,8 @@ const initialState = {
 		email: "",
 		user_id: "",
 		pfp_url: "",
+		access_token: "",
+		refresh_token: "",
 		roles: [],
 	} as AuthState,
 } as InitialState;
@@ -30,24 +34,50 @@ export const auth = createSlice({
 	initialState,
 	reducers: {
 		logOut: () => {
+			localStorage.removeItem("user");
 			return initialState;
 		},
 
-		logIn: (state, action: PayloadAction<string>) => {
+		setUser: (
+			state,
+			action: PayloadAction<{
+				username: string;
+				email: string;
+				user_id: string;
+				pfp_url: string;
+				access_token: string;
+				refresh_token: string;
+				roles: Array<string>;
+			}>
+		) => {
+			localStorage.setItem(
+				"user",
+				JSON.stringify({
+					isAuth: true,
+					username: action.payload.username,
+					email: action.payload.email,
+					user_id: action.payload.user_id,
+					pfp_url: action.payload.pfp_url,
+					roles: action.payload.roles,
+					access_token: action.payload.access_token,
+					refresh_token: action.payload.refresh_token,
+				})
+			);
 			return {
 				value: {
 					isAuth: true,
-					username: getUsernameFromEmail(action.payload),
-					email: action.payload,
-					user_id: "asdasd",
-					pfp_url:
-						"https://pbs.twimg.com/profile_images/1675393092093091840/_jdt3xa5_400x400.jpg",
-					roles: ["user", "pro"],
+					username: action.payload.username,
+					email: action.payload.email,
+					user_id: action.payload.user_id,
+					pfp_url: action.payload.pfp_url,
+					roles: action.payload.roles,
+					access_token: action.payload.access_token,
+					refresh_token: action.payload.refresh_token,
 				},
 			};
 		},
 	},
 });
 
-export const { logOut, logIn } = auth.actions;
+export const { logOut, setUser } = auth.actions;
 export default auth.reducer;

@@ -5,8 +5,6 @@ export const metadata = {
 	description: "Cricket Ball by Ball Commentary",
 };
 
-const Login = () => {
+export default function Login() {
 	return <LoginPage />;
-};
-
-export default Login;
+}
