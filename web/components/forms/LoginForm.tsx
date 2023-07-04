@@ -30,6 +30,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
+import { useLoginUserMutation } from "@/redux/features/authApi";
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50).email(),
@@ -40,6 +41,15 @@ export function LoginForm() {
 	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
 	const { toast } = useToast();
+	const [
+		loginUser,
+		{
+			data: loginData,
+			isSuccess: loginSuccess,
+			isLoading: loginLoading,
+			isError: loginError,
+		},
+	] = useLoginUserMutation();
 
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -54,12 +64,25 @@ export function LoginForm() {
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		// Do something with the form values.
 		// ✅ This will be type-safe and validated.
-		console.log(values);
-		dispatch(logIn(values.email));
-		router.push("/");
-		toast({
-			title: "Logged In Successfully!",
-		});
+
+		if (values.email && values.password) {
+			loginUser({ email: values.email, password: values.password });
+		}
+
+		if (loginSuccess) {
+			console.log(values);
+			dispatch(logIn(values.email));
+			router.push("/");
+			toast({
+				title: "Logged In Successfully!",
+			});
+		}
+
+		if (loginError) {
+			toast({
+				title: "Login Failed!",
+			});
+		}
 	}
 
 	return (
