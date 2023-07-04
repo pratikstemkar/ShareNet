@@ -1,12 +1,15 @@
 package rest
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/pratikstemkar/matchup/internal/transport/rest/handler"
 )
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+
+	r.Use(cors.Default())
 
 	r.GET("/", handler.Home)
 
