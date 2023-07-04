@@ -20,9 +20,14 @@ func SetupRouter() *gin.Engine {
 	// ROLE
 	r.POST("/api/v1/role", handler.PostRole)
 	r.GET("/api/v1/role/:id", handler.GetRole)
-	r.GET("/api/v1/role", handler.GetRoleList)
+	r.GET("/api/v1/role", handler.AuthMiddleware(), handler.GetRoleList)
 	r.PUT("/api/v1/role", handler.PutRole)
 	r.DELETE("/api/v1/role/:id", handler.DeleteRole)
+
+	// AUTH
+	r.POST("/api/v1/login", handler.Login)
+	r.POST("/api/v1/register", handler.Register)
+	r.POST("/api/v1/refresh", handler.RefreshToken)
 
 	return r
 }

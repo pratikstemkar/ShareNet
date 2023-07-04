@@ -35,6 +35,15 @@ func ReadUser(user_id string) (*models.User, error) {
 	return &user, nil
 }
 
+func ReadUserByEmail(email string) (*models.User, error) {
+	var user models.User
+	res := DB.Preload("Roles").Find(&user, "email = ?", email)
+	if res.RowsAffected == 0 {
+		return nil, errors.New("user not found")
+	}
+	return &user, nil
+}
+
 func ReadUserList() ([]*models.User, error) {
 	var userList []*models.User
 	// res := DB.Find(&userList)
@@ -67,6 +76,7 @@ func UpdateUser(user *models.User) (*models.User, error) {
 func DeleteUser(user_id string) error {
 	var deleteUser models.User
 	res := DB.Model(&deleteUser).Where("user_id = ?", user_id).Delete(&deleteUser)
+	_ = DB.Exec("DELETE FROM public.user_roles WHERE user_user_id = ?;", user_id)
 	if res.RowsAffected == 0 {
 		return errors.New("user not deleted")
 	}
