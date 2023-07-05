@@ -3,6 +3,8 @@ import { EditProfile } from "@/components/profile/EditProfile";
 import ProfileAvatar from "@/components/profile/ProfileAvatar";
 import { useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
+import { SettingsIcon } from "lucide-react";
 
 export default function ProfilePage() {
 	const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
@@ -23,6 +25,9 @@ export default function ProfilePage() {
 							</div>
 						</div>
 						<div className="p-5 flex flex-row-reverse items-center">
+							<Button size="sm" variant="ghost" className="ml-2">
+								<SettingsIcon className="h-4 w-4" />
+							</Button>
 							<EditProfile />
 						</div>
 					</div>

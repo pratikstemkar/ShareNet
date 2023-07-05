@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons/icons";
-import { logIn } from "@/redux/features/authSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { useRouter } from "next/navigation";
@@ -30,14 +29,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
+import { useRegisterUserMutation } from "@/redux/features/authApi";
+import { useEffect } from "react";
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50).email(),
-	password: z.string().min(8).max(18),
+	password: z.string().min(5).max(18),
 });
 
 export function RegisterForm() {
-	const dispatch = useDispatch<AppDispatch>();
+	const [
+		registerUser,
+		{ data: rData, isSuccess: rSuccess, isError: rError, isLoading: rLoading },
+	] = useRegisterUserMutation();
 	const router = useRouter();
 	const { toast } = useToast();
 
@@ -54,13 +58,33 @@ export function RegisterForm() {
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		// Do something with the form values.
 		// ✅ This will be type-safe and validated.
-		console.log(values);
-		dispatch(logIn(values.email));
-		router.push("/");
-		toast({
-			title: "Logged In Successfully!",
-		});
+
+		if (values.email && values.password) {
+			registerUser({
+				email: values.email,
+				password: values.password,
+				roles: [{ rolename: "user" }],
+			});
+		}
 	}
+
+	useEffect(() => {
+		if (rError) {
+			toast({
+				title: "Registration Failed!",
+			});
+		}
+
+		if (rSuccess) {
+			if (rData) {
+				console.log(rData);
+				router.push("/auth/login");
+				toast({
+					title: "User Registered Successfully!",
+				});
+			}
+		}
+	}, [rLoading]);
 
 	return (
 		<Card>
@@ -70,48 +94,6 @@ export function RegisterForm() {
 					Enter your email below to create your account
 				</CardDescription>
 			</CardHeader>
-			{/* <CardContent className="grid gap-4">
-				<div className="grid grid-cols-2 gap-6">
-					<Button variant="outline">
-						<Icons.gitHub className="mr-2 h-4 w-4" />
-						Github
-					</Button>
-					<Button variant="outline">
-						<Icons.google className="mr-2 h-4 w-4" />
-						Google
-					</Button>
-				</div>
-				<div className="relative">
-					<div className="absolute inset-0 flex items-center">
-						<span className="w-full border-t" />
-					</div>
-					<div className="relative flex justify-center text-xs uppercase">
-						<span className="bg-background px-2 text-muted-foreground">
-							Or continue with
-						</span>
-					</div>
-				</div>
-				<div className="grid gap-2">
-					<Label htmlFor="email">Email</Label>
-					<Input
-						id="email"
-						type="email"
-						placeholder="m@example.com"
-						onChange={(e) => setEmail(e.target.value)}
-					/>
-					{email}
-				</div>
-				<div className="grid gap-2">
-					<Label htmlFor="password">Password</Label>
-					<Input id="password" type="password" />
-				</div>
-			</CardContent>
-			<CardFooter>
-				<Button className="w-full" onClick={onClickLogIn}>
-					Sign In
-				</Button>
-			</CardFooter> */}
-
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
 					<CardContent className="grid gap-4">

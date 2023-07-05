@@ -19,17 +19,19 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<body className="min-h-screen flex flex-col justify-between">
+			<body>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 					<AuthApiProvider>
 						<ReduxApiProvider>
 							<ReduxProvider>
-								<div>
-									<Navbar />
-									{children}
+								<div className="min-h-screen flex flex-col justify-between">
+									<div>
+										<Navbar />
+										{children}
+									</div>
+									<Toaster />
+									<Footer />
 								</div>
-								<Toaster />
-								<Footer />
 							</ReduxProvider>
 						</ReduxApiProvider>
 					</AuthApiProvider>

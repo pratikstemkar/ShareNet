@@ -32,11 +32,9 @@ import { useToast } from "../ui/use-toast";
 import {
 	useLazyReadUserQuery,
 	useLoginUserMutation,
-	useReadUserQuery,
 } from "@/redux/features/authApi";
 import { useEffect, useState } from "react";
 import { setUser } from "@/redux/features/authSlice";
-import { data } from "autoprefixer";
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50).email(),
@@ -44,9 +42,6 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
-	const [skip, setSkip] = useState(true);
-	const [email, setEmail] = useState("");
-	const [xdata, setXdata] = useState(null);
 	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
 	const { toast } = useToast();
@@ -59,12 +54,6 @@ export function LoginForm() {
 			isError: loginError,
 		},
 	] = useLoginUserMutation();
-	const {
-		data: userData,
-		isSuccess: userSuccess,
-		isError: userError,
-		isLoading: userLoading,
-	} = useReadUserQuery(email, { skip });
 
 	const [trigger, results] = useLazyReadUserQuery();
 
@@ -91,7 +80,6 @@ export function LoginForm() {
 	useEffect(() => {
 		if (loginSuccess) {
 			if (results && results.data) {
-				setXdata(results.data);
 				console.log(results.data);
 				dispatch(
 					setUser({

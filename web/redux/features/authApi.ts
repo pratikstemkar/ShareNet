@@ -16,6 +16,33 @@ export const authApi = createApi({
 				};
 			},
 		}),
+		registerUser: builder.mutation({
+			query: (body: {
+				email: string;
+				password: string;
+				roles: [{ rolename: string }];
+			}) => {
+				return {
+					url: "api/v1/register",
+					method: "post",
+					body,
+				};
+			},
+		}),
+		updateUser: builder.mutation({
+			query: (body: {
+				user_id: string;
+				email: string;
+				username: string;
+				pfp_url: string;
+			}) => {
+				return {
+					url: "api/v1/user",
+					method: "put",
+					body,
+				};
+			},
+		}),
 		readUser: builder.query({
 			query: (email: string) => {
 				return {
@@ -27,5 +54,9 @@ export const authApi = createApi({
 	}),
 });
 
-export const { useLoginUserMutation, useReadUserQuery, useLazyReadUserQuery } =
-	authApi;
+export const {
+	useLoginUserMutation,
+	useLazyReadUserQuery,
+	useRegisterUserMutation,
+	useUpdateUserMutation,
+} = authApi;

@@ -27,15 +27,34 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useAppSelector } from "@/redux/store";
+import { useUpdateUserMutation } from "@/redux/features/authApi";
+import { useEffect } from "react";
+import { useToast } from "../ui/use-toast";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50).email(),
 	username: z.string(),
+	pfp_url: z.string(),
 });
 
 export function EditProfile() {
 	const email = useAppSelector((state) => state.authReducer.value.email);
 	const username = useAppSelector((state) => state.authReducer.value.username);
+	const pfp_url = useAppSelector((state) => state.authReducer.value.pfp_url);
+	const user_id = useAppSelector((state) => state.authReducer.value.user_id);
+
+	const { toast } = useToast();
+
+	const [
+		updateUser,
+		{
+			data: updateData,
+			isSuccess: updateSuccess,
+			isError: updateError,
+			isLoading: updateLoading,
+		},
+	] = useUpdateUserMutation();
 
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -43,6 +62,7 @@ export function EditProfile() {
 		defaultValues: {
 			email,
 			username,
+			pfp_url,
 		},
 	});
 
@@ -50,8 +70,32 @@ export function EditProfile() {
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		// Do something with the form values.
 		// ✅ This will be type-safe and validated.
-		console.log(values);
+		if (values.email && values.username && values.pfp_url) {
+			updateUser({
+				user_id,
+				username: values.username,
+				email: values.email,
+				pfp_url: values.pfp_url,
+			});
+		}
 	}
+
+	useEffect(() => {
+		if (updateError) {
+			toast({
+				title: "Update Failed!",
+			});
+		}
+
+		if (updateSuccess) {
+			if (updateData) {
+				console.log(updateData);
+				toast({
+					title: "User updated Successfully!",
+				});
+			}
+		}
+	}, [updateLoading]);
 
 	return (
 		<Dialog>
@@ -78,7 +122,11 @@ export function EditProfile() {
 								<FormItem>
 									<FormLabel>Email</FormLabel>
 									<FormControl>
-										<Input placeholder="email@example.com" {...field} />
+										<Input
+											placeholder="email@example.com"
+											{...field}
+											disabled
+										/>
 									</FormControl>
 									{/* <FormDescription>
 									This is your public display name.
@@ -101,8 +149,24 @@ export function EditProfile() {
 								</FormItem>
 							)}
 						/>
+						<FormField
+							control={form.control}
+							name="pfp_url"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Profile Picture</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+									{/* <FormDescription>Password is saved in hash.</FormDescription> */}
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						<DialogFooter>
-							<Button type="submit">Save changes</Button>
+							<DialogClose>
+								<Button type="submit">Save changes</Button>
+							</DialogClose>
 						</DialogFooter>
 					</form>
 				</Form>

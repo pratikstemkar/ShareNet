@@ -7,13 +7,13 @@ type InitialState = {
 
 type AuthState = {
 	isAuth: boolean;
-	username: string | null;
-	email: string | null;
-	user_id: string | null;
-	pfp_url: string | null;
-	access_token: string | null;
-	refresh_token: string | null;
-	roles: Array<string> | null;
+	username: string;
+	email: string;
+	user_id: string;
+	pfp_url: string;
+	access_token: string;
+	refresh_token: string;
+	roles: Array<string>;
 };
 
 const initialState = {

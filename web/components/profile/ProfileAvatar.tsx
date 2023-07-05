@@ -6,13 +6,11 @@ import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 export default function ProfileAvatar() {
 	const email = useAppSelector((state) => state.authReducer.value.email);
 	const username = useAppSelector((state) => state.authReducer.value.username);
+	const pfp_url = useAppSelector((state) => state.authReducer.value.pfp_url);
 	return (
 		<>
 			<Avatar className="h-40 w-40 mr-5">
-				<AvatarImage
-					src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
-					alt="ProfilePicture"
-				/>
+				<AvatarImage src={pfp_url} alt="ProfilePicture" />
 				<AvatarFallback>PC</AvatarFallback>
 			</Avatar>
 			<div>

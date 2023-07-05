@@ -12,3 +12,25 @@ export function getUsernameFromEmail(email: string): string | null {
 	}
 	return null;
 }
+
+interface MyObject {
+	rolename: string;
+}
+
+export function convertStringArrayToObjectArray(
+	strArray: string[]
+): MyObject[] {
+	const objArray: MyObject[] = [];
+
+	for (const str of strArray) {
+		const name = str.trim();
+
+		const obj: MyObject = {
+			rolename: name,
+		};
+
+		objArray.push(obj);
+	}
+
+	return objArray;
+}

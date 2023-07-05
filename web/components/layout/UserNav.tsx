@@ -37,6 +37,7 @@ import { useToast } from "../ui/use-toast";
 export function UserNav() {
 	const email = useAppSelector((state) => state.authReducer.value.email);
 	const username = useAppSelector((state) => state.authReducer.value.username);
+	const pfp_url = useAppSelector((state) => state.authReducer.value.pfp_url);
 
 	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
@@ -55,10 +56,7 @@ export function UserNav() {
 					className="relative h-8 w-8 rounded-full shadow"
 				>
 					<Avatar className="h-8 w-8">
-						<AvatarImage
-							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
-							alt="@shadcn"
-						/>
+						<AvatarImage src={pfp_url} alt="@shadcn" />
 						<AvatarFallback>SC</AvatarFallback>
 					</Avatar>
 				</Button>
