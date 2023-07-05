@@ -8,6 +8,7 @@ import { ModeToggle } from "../dark-mode/ModeToggle";
 import { Badge } from "../ui/badge";
 import { NotiPop } from "./NotiPop";
 import Image from "next/image";
+import { SearchBar } from "./SearchBar";
 
 const Navbar = () => {
 	const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
@@ -37,6 +38,7 @@ const Navbar = () => {
 				<div className="space-x-5 items-center flex">
 					{isAuth ? (
 						<>
+							<SearchBar />
 							<NotiPop />
 							<UserNav />
 						</>

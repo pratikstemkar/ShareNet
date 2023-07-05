@@ -39,9 +39,11 @@ export default function SocialPage() {
 	const router = useRouter();
 
 	const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
+	const pfp_url = useAppSelector((state) => state.authReducer.value.pfp_url);
 	const roles = useAppSelector((state) => state.authReducer.value.roles);
 
-	const { data, isSuccess, isError, isLoading } = useGetAllPostsQuery("");
+	const { data, isSuccess, isError, isLoading, isFetching } =
+		useGetAllPostsQuery("");
 
 	return (
 		<div className="grid grid-cols-4 gap-5">
@@ -52,10 +54,7 @@ export default function SocialPage() {
 						<CardContent className="mt-5">
 							<div className="flex space-x-2 items-center">
 								<Avatar className="h-8 w-8 mr-2">
-									<AvatarImage
-										src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
-										alt="ProfilePicture"
-									/>
+									<AvatarImage src={pfp_url} alt="ProfilePicture" />
 									<AvatarFallback>PC</AvatarFallback>
 								</Avatar>
 								<Input

@@ -17,46 +17,55 @@ import {
 	CommandSeparator,
 	CommandShortcut,
 } from "@/components/ui/command";
+import { useState } from "react";
+import { PopoverContent } from "@radix-ui/react-popover";
+import { Popover, PopoverTrigger } from "../ui/popover";
+import { Skeleton } from "../ui/skeleton";
 
 export function SearchBar() {
 	return (
-		<Command className="rounded-lg border h-8">
-			<CommandInput placeholder="Type a command or search..." />
-			{/* <CommandList>
-				<CommandEmpty>No results found.</CommandEmpty>
-				<CommandGroup heading="Suggestions">
-					<CommandItem>
-						<CalendarIcon className="mr-2 h-4 w-4" />
-						<span>Calendar</span>
-					</CommandItem>
-					<CommandItem>
-						<FaceIcon className="mr-2 h-4 w-4" />
-						<span>Search Emoji</span>
-					</CommandItem>
-					<CommandItem>
-						<RocketIcon className="mr-2 h-4 w-4" />
-						<span>Launch</span>
-					</CommandItem>
-				</CommandGroup>
-				<CommandSeparator />
-				<CommandGroup heading="Settings">
-					<CommandItem>
-						<PersonIcon className="mr-2 h-4 w-4" />
-						<span>Profile</span>
-						<CommandShortcut>⌘P</CommandShortcut>
-					</CommandItem>
-					<CommandItem>
-						<EnvelopeClosedIcon className="mr-2 h-4 w-4" />
-						<span>Mail</span>
-						<CommandShortcut>⌘B</CommandShortcut>
-					</CommandItem>
-					<CommandItem>
-						<GearIcon className="mr-2 h-4 w-4" />
-						<span>Settings</span>
-						<CommandShortcut>⌘S</CommandShortcut>
-					</CommandItem>
-				</CommandGroup>
-			</CommandList> */}
+		<Command className="rounded-lg border">
+			<Popover>
+				<PopoverTrigger asChild>
+					<CommandInput placeholder="Type a command or search..." />
+				</PopoverTrigger>
+				<PopoverContent className="min-w-5xl bg-slate-950 border-2 rounded-sm mt-1">
+					<div>
+						<CommandList className="z-20">
+							<CommandEmpty>No results found.</CommandEmpty>
+							<CommandGroup heading="Teams">
+								<CommandItem>
+									<Skeleton className="h-4 w-4 rounded-full mr-2" />
+									<Skeleton className="h-2 w-[220px]" />
+								</CommandItem>
+								<CommandItem>
+									<Skeleton className="h-4 w-4 rounded-full mr-2" />
+									<Skeleton className="h-2 w-[220px]" />
+								</CommandItem>
+								<CommandItem>
+									<Skeleton className="h-4 w-4 rounded-full mr-2" />
+									<Skeleton className="h-2 w-[220px]" />
+								</CommandItem>
+							</CommandGroup>
+							<CommandSeparator />
+							<CommandGroup heading="Users">
+								<CommandItem>
+									<Skeleton className="h-4 w-4 rounded-full mr-2" />
+									<Skeleton className="h-2 w-[220px]" />
+								</CommandItem>
+								<CommandItem>
+									<Skeleton className="h-4 w-4 rounded-full mr-2" />
+									<Skeleton className="h-2 w-[220px]" />
+								</CommandItem>
+								<CommandItem>
+									<Skeleton className="h-4 w-4 rounded-full mr-2" />
+									<Skeleton className="h-2 w-[220px]" />
+								</CommandItem>
+							</CommandGroup>
+						</CommandList>
+					</div>
+				</PopoverContent>
+			</Popover>
 		</Command>
 	);
 }

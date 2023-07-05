@@ -1,4 +1,3 @@
-import { getUsernameFromEmail } from "@/lib/utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type InitialState = {
