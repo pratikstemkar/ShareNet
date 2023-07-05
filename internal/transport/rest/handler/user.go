@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -51,6 +52,23 @@ func GetUser(c *gin.Context) {
 	})
 }
 
+// @route GET /api/v1/user/email/:id
+// @desc Read a user by email
+// @access Public
+func GetUserByEmail(c *gin.Context) {
+	email := c.Param("email")
+	user, err := database.ReadUserByEmail(email)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "user not found",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+	})
+}
+
 // @route GET /api/v1/user
 // @desc Read all users
 // @access Public
@@ -71,14 +89,22 @@ func GetUserList(c *gin.Context) {
 // @desc Update user by id
 // @access Public
 func PutUser(c *gin.Context) {
-	var user models.User
-	if err := c.ShouldBindJSON(&user); err != nil {
+	// var user models.User
+	// if err := c.ShouldBindJSON(&user); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{
+	// 		"error": err,
+	// 	})
+	// 	return
+	// }
+	var updates map[string]interface{}
+	if err := c.ShouldBindJSON(&updates); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
 		})
 		return
 	}
-	res, err := database.UpdateUser(&user)
+	fmt.Println(updates)
+	res, err := database.UpdateUser(updates)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,

@@ -54,19 +54,21 @@ func ReadUserList() ([]*models.User, error) {
 	return userList, nil
 }
 
-func UpdateUser(user *models.User) (*models.User, error) {
+func UpdateUser(updates map[string]interface{}) (*models.User, error) {
 	var updateUser models.User
 	// fmt.Println("User roles:")
-	roles_copy := user.Roles
-	user.Roles = []models.Role{}
-	for _, user_role := range roles_copy {
-		// fmt.Println(user_role.Rolename)
-		var role models.Role
-		DB.FirstOrCreate(&role, user_role)
-		user.Roles = append(user.Roles, role)
-		// fmt.Print(role)
-	}
-	res := DB.Model(&updateUser).Where("user_id = ?", user.User_Id).Updates(user)
+	// if _, ok := updates["Roles"]; ok {
+	// 	roles_copy := updates["Roles"]
+	// updates["Roles"] = []models.Role{}
+	// for _, user_role := range roles_copy {
+	// 	// fmt.Println(user_role.Rolename)
+	// 	var role models.Role
+	// 	DB.FirstOrCreate(&role, user_role)
+	// 	updates["Roles"] = append(updates["Roles"], role)
+	// 	// fmt.Print(role)
+	// }
+	// }
+	res := DB.Model(&updateUser).Where("user_id = ?", updates["user_id"]).Updates(updates)
 	if res.RowsAffected == 0 {
 		return &models.User{}, errors.New("user not updated")
 	}
