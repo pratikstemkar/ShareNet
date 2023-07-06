@@ -43,8 +43,8 @@ func UpdateRole(role *models.Role) (*models.Role, error) {
 }
 
 func DeleteRole(role_id string) error {
-	var deleteUser models.Role
-	res := DB.Model(&deleteUser).Where("role_id = ?", role_id).Delete(&deleteUser)
+	var deleteRole models.Role
+	res := DB.Model(&deleteRole).Where("role_id = ?", role_id).Delete(&deleteRole)
 	if res.RowsAffected == 0 {
 		return errors.New("role not deleted")
 	}

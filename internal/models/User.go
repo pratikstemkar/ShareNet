@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// Users Model
+// User Model
 type User struct {
 	User_Id uuid.UUID `json:"user_id" gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
 	Username string `json:"username" gorm:"unique"`
@@ -14,6 +14,8 @@ type User struct {
 	Password string `json:"password"`
 	Pfp_Url string `json:"pfp_url"`
 	Roles []Role `json:"roles" gorm:"many2many:user_roles;constraint:OnDelete:CASCADE;"`
+	Posts []Post `json:"posts" gorm:"foreignkey:User_Id;constraint:OnDelete:CASCADE;"`
+	Comments []Comment `json:"comments" gorm:"foreignkey:User_Id;constraint:OnDelete:CASCADE;"`
 	CreatedAt time.Time
 }
 
