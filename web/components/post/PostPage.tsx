@@ -172,78 +172,82 @@ const PostPage = (props: { postId: string }) => {
 										</Form>
 									</div>
 								) : null}
-								<Separator />
-								<div className="space-y-5">
-									{commentsSuccess ? (
-										<>
-											<h4 className="text-lg font-semibold">
-												{comments.count} Comments
-											</h4>
-											{comments?.comment_list?.map((comment: any) => (
-												<div className="space-y-2" key={comment.comment_id}>
-													<div className="flex items-center">
-														<Avatar className="h-8 w-8 mr-2">
-															<AvatarImage
-																src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
-																alt="ProfilePicture"
-															/>
-															<AvatarFallback>PF</AvatarFallback>
-														</Avatar>
-														<Link
-															href="/profile"
-															className="mr-2 hover:underline"
-														>
-															{comment.user_id}
-														</Link>
-														<TooltipProvider>
-															<Tooltip>
-																<TooltipTrigger>
-																	<span className="text-sm text-slate-500">
-																		{convertTimestampToRelativeTime(
-																			comment.CreatedAt
-																		)}
-																	</span>
-																</TooltipTrigger>
-																<TooltipContent>
-																	<p>
-																		{convertTimestampToReadableTime(
-																			comment.CreatedAt
-																		)}
-																	</p>
-																</TooltipContent>
-															</Tooltip>
-														</TooltipProvider>
-													</div>
-													<p className="text-sm">{comment.content}</p>
-													<div className="flex">
-														<Button variant="ghost" size="sm">
-															24
-															<ThumbsUpIcon className="h-4 w-4 ml-2" />
-														</Button>
-														<Button variant="ghost" size="sm">
-															0
-															<ThumbsDownIcon className="h-4 w-4 ml-2" />
-														</Button>
-														<Button variant="ghost" size="sm">
-															<ReplyIcon className="h-4 w-4 mr-2" />
-															Reply
-														</Button>
-														<Button variant="ghost" size="sm">
-															<ForwardIcon className="h-4 w-4 mr-2" />
-															Share
-														</Button>
+								{post.post.comment_count > 0 ? (
+									<>
+										<Separator />
+										<div className="space-y-5">
+											{commentsSuccess ? (
+												<>
+													<h4 className="text-lg font-semibold">
+														{comments.count} Comments
+													</h4>
+													{comments?.comment_list?.map((comment: any) => (
+														<div className="space-y-2" key={comment.comment_id}>
+															<div className="flex items-center">
+																<Avatar className="h-8 w-8 mr-2">
+																	<AvatarImage
+																		src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
+																		alt="ProfilePicture"
+																	/>
+																	<AvatarFallback>PF</AvatarFallback>
+																</Avatar>
+																<Link
+																	href="/profile"
+																	className="mr-2 hover:underline"
+																>
+																	{comment.user_id}
+																</Link>
+																<TooltipProvider>
+																	<Tooltip>
+																		<TooltipTrigger>
+																			<span className="text-sm text-slate-500">
+																				{convertTimestampToRelativeTime(
+																					comment.CreatedAt
+																				)}
+																			</span>
+																		</TooltipTrigger>
+																		<TooltipContent>
+																			<p>
+																				{convertTimestampToReadableTime(
+																					comment.CreatedAt
+																				)}
+																			</p>
+																		</TooltipContent>
+																	</Tooltip>
+																</TooltipProvider>
+															</div>
+															<p className="text-sm">{comment.content}</p>
+															<div className="flex">
+																<Button variant="ghost" size="sm">
+																	24
+																	<ThumbsUpIcon className="h-4 w-4 ml-2" />
+																</Button>
+																<Button variant="ghost" size="sm">
+																	0
+																	<ThumbsDownIcon className="h-4 w-4 ml-2" />
+																</Button>
+																<Button variant="ghost" size="sm">
+																	<ReplyIcon className="h-4 w-4 mr-2" />
+																	Reply
+																</Button>
+																<Button variant="ghost" size="sm">
+																	<ForwardIcon className="h-4 w-4 mr-2" />
+																	Share
+																</Button>
 
-														<Button variant="ghost" size="sm">
-															<MoreHorizontalIcon className="h-4 w-4" />
-														</Button>
-													</div>
-												</div>
-											))}
-										</>
-									) : (
-										<>Loading...</>
-									)}
-								</div>
+																<Button variant="ghost" size="sm">
+																	<MoreHorizontalIcon className="h-4 w-4" />
+																</Button>
+															</div>
+														</div>
+													))}
+												</>
+											) : (
+												<>Loading...</>
+											)}
+										</div>
+									</>
+								) : null}
 							</CardContent>
 						</Card>
 					) : (
