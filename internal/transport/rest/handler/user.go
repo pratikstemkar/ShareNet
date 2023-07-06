@@ -52,6 +52,23 @@ func GetUser(c *gin.Context) {
 	})
 }
 
+// @route GET /api/v1/profile/user/:id
+// @desc Read a user by id
+// @access Public
+func GetPublicUser(c *gin.Context) {
+	id := c.Param("id")
+	user, err := database.ReadPublicUser(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "user not found",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+	})
+}
+
 // @route GET /api/v1/user/email/:id
 // @desc Read a user by email
 // @access Public

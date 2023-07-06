@@ -16,7 +16,7 @@ func CreatePost(post *models.Post) (*models.Post, error) {
 
 func ReadPost(post_id string) (*models.Post, error) {
 	var post models.Post
-	res := DB.Preload("Comments").Find(&post, "post_id = ?", post_id)
+	res := DB.Find(&post, "post_id = ?", post_id)
 	if res.RowsAffected == 0 {
 		return nil, errors.New("post not found")
 	}
@@ -39,7 +39,7 @@ func ReadPostByUser(user_id string) ([]*models.Post, int, error) {
 
 func ReadPostList() ([]*models.Post, error) {
 	var postList []*models.Post
-	res := DB.Find(&postList)
+	res := DB.Model(&models.Post{}).Find(&postList)
 	if res.Error != nil {
 		return nil, errors.New("post list not found")
 	}

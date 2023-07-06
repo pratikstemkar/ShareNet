@@ -3,19 +3,20 @@ module github.com/pratikstemkar/matchup
 go 1.20
 
 require (
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/google/uuid v1.3.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/joho/godotenv v1.5.1
 	golang.org/x/crypto v0.9.0
+	gorm.io/gorm v1.25.2
 )
 
 require (
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
-	github.com/gin-contrib/cors v1.4.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
