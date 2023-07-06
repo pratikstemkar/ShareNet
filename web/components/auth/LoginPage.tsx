@@ -8,7 +8,7 @@ export default function LoginPage() {
 	const router = useRouter();
 
 	if (isAuth) {
-		router.push("/");
+		return router.push("/");
 	}
 
 	return (

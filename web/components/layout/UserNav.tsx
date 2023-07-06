@@ -37,6 +37,7 @@ import { useToast } from "../ui/use-toast";
 export function UserNav() {
 	const email = useAppSelector((state) => state.authReducer.value.email);
 	const username = useAppSelector((state) => state.authReducer.value.username);
+	const user_id = useAppSelector((state) => state.authReducer.value.user_id);
 	const pfp_url = useAppSelector((state) => state.authReducer.value.pfp_url);
 
 	const dispatch = useDispatch<AppDispatch>();
@@ -90,7 +91,7 @@ export function UserNav() {
 					</DropdownMenuItem>
 					<DropdownMenuItem
 						className="hover:cursor-pointer"
-						onClick={() => router.push("/profile")}
+						onClick={() => router.push(`/profile/${user_id}`)}
 					>
 						<User className="mr-2 h-4 w-4" />
 						<span>Profile</span>

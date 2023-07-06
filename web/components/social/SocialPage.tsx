@@ -67,7 +67,11 @@ export default function SocialPage() {
 				<div className="space-y-5">
 					{/* <p>{isLoading ? null : JSON.stringify(data)}</p> */}
 					{isLoading ? (
-						<PostCardSkeleton />
+						<>
+							<PostCardSkeleton />
+							<PostCardSkeleton />
+							<PostCardSkeleton />
+						</>
 					) : (
 						data.post_list?.map((post: any) => (
 							<PostCard key={post.post_id} {...post} />

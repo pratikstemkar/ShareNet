@@ -14,8 +14,8 @@ export default function ProfileAvatar() {
 				<AvatarFallback>PC</AvatarFallback>
 			</Avatar>
 			<div>
-				<div className="text-lg">{username}</div>
-				<div className="text-sm">{email}</div>
+				<div className="text-lg font-extrabold">{username}</div>
+				<div className="text-sm">i am good for nothing</div>
 			</div>
 		</>
 	);

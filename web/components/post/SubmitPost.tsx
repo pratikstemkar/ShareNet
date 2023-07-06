@@ -33,7 +33,10 @@ import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { FileTextIcon, ImageIcon, LinkIcon, Trash2Icon } from "lucide-react";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { Input } from "../ui/input";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useAppSelector } from "@/redux/store";
+import { usePostPostMutation } from "@/redux/features/apiSlice";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
 	postTitle: z
@@ -49,8 +52,8 @@ const FormSchema = z.object({
 		.min(10, {
 			message: "Post must be at least 10 characters.",
 		})
-		.max(160, {
-			message: "Post must not be longer than 30 characters.",
+		.max(500, {
+			message: "Post must not be longer than 500 characters.",
 		}),
 });
 
@@ -81,6 +84,18 @@ const ImgFormSchema = z.object({
 const SubmitPost = () => {
 	const [selectedImage, setSelectedImage] = useState<File | undefined>();
 	const { toast } = useToast();
+	const user_id = useAppSelector((state) => state.authReducer.value.user_id);
+	const router = useRouter();
+
+	const [
+		postPost,
+		{
+			data: postData,
+			isLoading: postLoading,
+			isSuccess: postSuccess,
+			isError: postError,
+		},
+	] = usePostPostMutation();
 
 	const imageChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files && e.target.files.length > 0) {
@@ -106,15 +121,28 @@ const SubmitPost = () => {
 	});
 
 	function onSubmit(data: z.infer<typeof FormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">{JSON.stringify(data, null, 2)}</code>
-				</pre>
-			),
-		});
+		if (data.postTitle && data.postText) {
+			postPost({
+				title: data.postTitle,
+				content: data.postText,
+				user_id: user_id,
+			});
+		}
 	}
+
+	useEffect(() => {
+		if (postSuccess) {
+			router.push("/");
+			toast({
+				title: "Post Submitted!",
+			});
+		}
+		if (postError) {
+			toast({
+				title: "Post submission failed!",
+			});
+		}
+	}, [postLoading]);
 
 	function linkOnSubmit(data: z.infer<typeof LinkFormSchema>) {
 		toast({

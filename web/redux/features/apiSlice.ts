@@ -13,8 +13,36 @@ export const postApi = createApi({
 		getPostComments: builder.query({
 			query: (postId) => `api/v1/comment/post/${postId}`,
 		}),
+		getProfile: builder.query({
+			query: (userId) => `api/v1/profile/${userId}`,
+		}),
+		postPost: builder.mutation({
+			query: (body: { title: string; content: string; user_id: string }) => {
+				return {
+					url: "api/v1/post",
+					method: "post",
+					body,
+				};
+			},
+		}),
+		postComment: builder.mutation({
+			query: (body: { content: string; user_id: string; post_id: string }) => {
+				return {
+					url: "api/v1/comment",
+					method: "post",
+					body,
+				};
+			},
+		}),
 	}),
 });
 
-export const { useGetAllPostsQuery, useGetPostQuery, useGetPostCommentsQuery } =
-	postApi;
+export const {
+	useGetAllPostsQuery,
+	useGetPostQuery,
+	useGetPostCommentsQuery,
+	useGetProfileQuery,
+	useLazyGetProfileQuery,
+	usePostPostMutation,
+	usePostCommentMutation,
+} = postApi;

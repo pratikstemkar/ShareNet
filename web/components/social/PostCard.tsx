@@ -36,6 +36,9 @@ import {
 	convertTimestampToReadableTime,
 	convertTimestampToRelativeTime,
 } from "@/lib/utils";
+import { useAppSelector } from "@/redux/store";
+import { useGetProfileQuery } from "@/redux/features/apiSlice";
+import { Skeleton } from "../ui/skeleton";
 
 interface PostCardProps {
 	post_id: number;
@@ -60,79 +63,93 @@ export default function PostCard({
 }: PostCardProps) {
 	const router = useRouter();
 
+	const {
+		data: userData,
+		isSuccess: userSuccess,
+		isLoading: userLoading,
+	} = useGetProfileQuery(user_id);
+
 	return (
 		<Card
 			className="dark:hover:border-white hover:border-black hover:cursor-pointer"
 			onClick={() => router.push(`/post/${post_id}`)}
 		>
 			<CardHeader>
-				<div className="text-sm text-slate-500 flex items-center">
-					<Avatar className="h-4 w-4 mr-2">
-						<AvatarImage
-							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU"
-							alt="ProfilePicture"
-						/>
-						<AvatarFallback>PC</AvatarFallback>
-					</Avatar>
-					<HoverCard>
-						<HoverCardTrigger asChild>
-							<Link
-								href="/"
-								className="mr-2 dark:text-white text-black hover:underline"
-							>
-								{user_id}
-							</Link>
-						</HoverCardTrigger>
-						<HoverCardContent className="w-80 hover:cursor-default">
-							<div className="flex justify-between space-x-4">
-								<Avatar>
-									<AvatarImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUaGEEgvFL2qP9pjsihLs2hqzVKqvlT1Bxg&usqp=CAU" />
-									<AvatarFallback>VC</AvatarFallback>
-								</Avatar>
+				{userLoading ? (
+					<div className="text-sm flex items-center">
+						<Skeleton className="h-4 w-4 mr-2" />
+						<Skeleton className="h-3 w-[300px]" />
+					</div>
+				) : (
+					<div className="text-sm text-slate-500 flex items-center">
+						<Avatar className="h-4 w-4 mr-2">
+							<AvatarImage src={userData.user.pfp_url} alt="ProfilePicture" />
+							<AvatarFallback>PC</AvatarFallback>
+						</Avatar>
+						<HoverCard>
+							<HoverCardTrigger asChild>
+								<Link
+									href="/"
+									className="mr-2 dark:text-white text-black hover:underline"
+								>
+									{userData.user.username}
+								</Link>
+							</HoverCardTrigger>
+							<HoverCardContent className="w-80 hover:cursor-default">
+								<div className="flex justify-between space-x-4">
+									<Avatar>
+										<AvatarImage src={userData.user.pfp_url} />
+										<AvatarFallback>VC</AvatarFallback>
+									</Avatar>
 
-								<div className="space-y-2">
-									<div className="grid grid-cols-2">
-										<h4 className="text-sm font-semibold">India</h4>
-										<div className="text-sm">
-											<span className="font-semibold">143k</span>{" "}
-											<span className="text-slate-500">members</span>
+									<div className="space-y-2">
+										<div className="grid grid-cols-2">
+											<h4 className="text-sm font-semibold">
+												{userData.user.username}
+											</h4>
+											<div className="text-sm">
+												<span className="font-semibold">143k</span>{" "}
+												<span className="text-slate-500">members</span>
+											</div>
 										</div>
-										<div>56k members</div>
-									</div>
-									<p className="text-sm">
-										The React Framework – created and maintained by @vercel.
-									</p>
-									<Button className="rounded-full w-full mt-4" size="sm">
-										Join Team
-									</Button>
-									<div className="flex items-center pt-2">
-										<CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
-										<span className="text-xs text-muted-foreground">
-											Joined December 2021
-										</span>
+										{/* <p className="text-sm">
+											The React Framework – created and maintained by @vercel.
+										</p> */}
+										<Button className="rounded-full w-full mt-4" size="sm">
+											Follow
+										</Button>
+										<div className="flex items-center pt-2">
+											<CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
+											<span className="text-xs text-muted-foreground">
+												Joined{" "}
+												{convertTimestampToReadableTime(
+													userData.user.CreatedAt
+												)}
+											</span>
+										</div>
 									</div>
 								</div>
-							</div>
-						</HoverCardContent>
-					</HoverCard>
-					{/* <span className="mr-2">
+							</HoverCardContent>
+						</HoverCard>
+						{/* <span className="mr-2">
 						Posted by{" "}
 						<Link href="/" className="hover:underline">
 							{user_id}
 						</Link>{" "}
 					</span> */}
 
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger>
-								<span>{convertTimestampToRelativeTime(CreatedAt)}</span>
-							</TooltipTrigger>
-							<TooltipContent>
-								<p>{convertTimestampToReadableTime(CreatedAt)}</p>
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-				</div>
+						<TooltipProvider>
+							<Tooltip>
+								<TooltipTrigger>
+									<span>{convertTimestampToRelativeTime(CreatedAt)}</span>
+								</TooltipTrigger>
+								<TooltipContent>
+									<p>{convertTimestampToReadableTime(CreatedAt)}</p>
+								</TooltipContent>
+							</Tooltip>
+						</TooltipProvider>
+					</div>
+				)}
 				<CardTitle>{title}</CardTitle>
 			</CardHeader>
 			<CardContent>{content}</CardContent>
