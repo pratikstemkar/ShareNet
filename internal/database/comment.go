@@ -12,7 +12,7 @@ func CreateComment(comment *models.Comment) (*models.Comment, error) {
 	if res.RowsAffected == 0 {
 		return &models.Comment{}, errors.New("comment not created")
 	}
-	err := DB.Model(&models.Post{}).Where("user_id = ?", comment.User_Id).UpdateColumn("comment_count", gorm.Expr("comment_count + ?", 1)).Error
+	err := DB.Model(&models.Post{}).Where("post_id = ?", comment.Post_Id).UpdateColumn("comment_count", gorm.Expr("comment_count + ?", 1)).Error
 	if err != nil {
 		return nil, err
 	}
@@ -30,7 +30,7 @@ func ReadComment(comment_id string) (*models.Comment, error) {
 
 func ReadCommentByUser(user_id string) ([]*models.Comment, int, error) {
 	var commentList []*models.Comment
-	res := DB.Find(&commentList, "user_id = ?", user_id)
+	res := DB.Order("created_at desc").Find(&commentList, "user_id = ?", user_id)
 	if res.RowsAffected == 0 {
 		return nil, 0, errors.New("comment not found")
 	}
@@ -44,7 +44,7 @@ func ReadCommentByUser(user_id string) ([]*models.Comment, int, error) {
 
 func ReadCommentByPost(post_id string) ([]*models.Comment, int, error) {
 	var commentList []*models.Comment
-	res := DB.Find(&commentList, "post_id = ?", post_id)
+	res := DB.Order("created_at desc").Find(&commentList, "post_id = ?", post_id)
 	if res.RowsAffected == 0 {
 		return nil, 0, errors.New("comment not found")
 	}
@@ -58,7 +58,7 @@ func ReadCommentByPost(post_id string) ([]*models.Comment, int, error) {
 
 func ReadCommentList() ([]*models.Comment, error) {
 	var commentList []*models.Comment
-	res := DB.Find(&commentList)
+	res := DB.Order("created_at desc").Find(&commentList)
 	if res.Error != nil {
 		return nil, errors.New("comment list not found")
 	}

@@ -25,7 +25,7 @@ func ReadPost(post_id string) (*models.Post, error) {
 
 func ReadPostByUser(user_id string) ([]*models.Post, int, error) {
 	var postList []*models.Post
-	res := DB.Find(&postList, "user_id = ?", user_id)
+	res := DB.Order("created_at desc").Find(&postList, "user_id = ?", user_id)
 	if res.RowsAffected == 0 {
 		return nil, 0, errors.New("post not found")
 	}
@@ -39,7 +39,7 @@ func ReadPostByUser(user_id string) ([]*models.Post, int, error) {
 
 func ReadPostList() ([]*models.Post, error) {
 	var postList []*models.Post
-	res := DB.Model(&models.Post{}).Find(&postList)
+	res := DB.Model(&models.Post{}).Order("created_at desc").Find(&postList)
 	if res.Error != nil {
 		return nil, errors.New("post list not found")
 	}

@@ -14,20 +14,20 @@ func SetupRouter() *gin.Engine {
 	r.GET("/", handler.Home)
 
 	// USER
-	r.POST("/api/v1/user", handler.AuthMiddleware(), handler.PostUser)
-	r.GET("/api/v1/user/:id", handler.AuthMiddleware(), handler.GetUser)
+	r.POST("/api/v1/user", handler.PostUser)
+	r.GET("/api/v1/user/:id", handler.GetUser)
 	r.GET("/api/v1/profile/:id", handler.GetPublicUser)
-	r.GET("/api/v1/user/email/:email", handler.AuthMiddleware(), handler.GetUserByEmail)
-	r.GET("/api/v1/user", handler.AuthMiddleware(), handler.GetUserList)
-	r.PUT("/api/v1/user", handler.AuthMiddleware(), handler.PutUser)
-	r.DELETE("/api/v1/user/:id", handler.AuthMiddleware(), handler.DeleteUser)
+	r.GET("/api/v1/user/email/:email", handler.GetUserByEmail)
+	r.GET("/api/v1/user", handler.GetUserList)
+	r.PUT("/api/v1/user", handler.PutUser)
+	r.DELETE("/api/v1/user/:id", handler.DeleteUser)
 
 	// ROLE
-	r.POST("/api/v1/role", handler.AuthMiddleware(), handler.PostRole)
-	r.GET("/api/v1/role/:id", handler.AuthMiddleware(), handler.GetRole)
-	r.GET("/api/v1/role", handler.AuthMiddleware(), handler.GetRoleList)
-	r.PUT("/api/v1/role", handler.AuthMiddleware(), handler.PutRole)
-	r.DELETE("/api/v1/role/:id", handler.AuthMiddleware(), handler.DeleteRole)
+	r.POST("/api/v1/role", handler.PostRole)
+	r.GET("/api/v1/role/:id", handler.GetRole)
+	r.GET("/api/v1/role", handler.GetRoleList)
+	r.PUT("/api/v1/role", handler.PutRole)
+	r.DELETE("/api/v1/role/:id", handler.DeleteRole)
 
 	// AUTH
 	r.POST("/api/v1/login", handler.Login)
