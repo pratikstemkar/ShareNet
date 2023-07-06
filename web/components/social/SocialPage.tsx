@@ -1,21 +1,7 @@
 "use client";
 
-import {
-	CalendarIcon,
-	ForwardIcon,
-	MoreHorizontalIcon,
-	SaveIcon,
-	ThumbsDownIcon,
-	ThumbsUp,
-	ThumbsUpIcon,
-} from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
-import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import {
 	Card,
 	CardContent,
@@ -26,11 +12,8 @@ import {
 import { Input } from "../ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useGetAllPostsQuery } from "@/redux/features/apiSlice";
-import PostCard from "./PostCard";
-import { Skeleton } from "../ui/skeleton";
-import PostCardSkeleton from "./PostCardSkeleton";
 import { useAppSelector } from "@/redux/store";
+import PostList from "./PostList";
 
 export default function SocialPage() {
 	const router = useRouter();
@@ -38,9 +21,6 @@ export default function SocialPage() {
 	const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
 	const pfp_url = useAppSelector((state) => state.authReducer.value.pfp_url);
 	const roles = useAppSelector((state) => state.authReducer.value.roles);
-
-	const { data, isSuccess, isError, isLoading, isFetching } =
-		useGetAllPostsQuery("");
 
 	return (
 		<div className="grid grid-cols-4 gap-5">
@@ -64,20 +44,7 @@ export default function SocialPage() {
 						</CardContent>
 					</Card>
 				) : null}
-				<div className="space-y-5">
-					{/* <p>{isLoading ? null : JSON.stringify(data)}</p> */}
-					{isLoading ? (
-						<>
-							<PostCardSkeleton />
-							<PostCardSkeleton />
-							<PostCardSkeleton />
-						</>
-					) : (
-						data.post_list?.map((post: any) => (
-							<PostCard key={post.post_id} {...post} />
-						))
-					)}
-				</div>
+				<PostList />
 			</div>
 			<div className="space-y-5">
 				{isAuth && roles?.includes("pro") ? null : (

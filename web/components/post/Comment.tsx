@@ -72,22 +72,21 @@ export default function Comment(comment: any) {
 				<p className="text-sm">{comment.content}</p>
 				<div className="flex">
 					<Button variant="ghost" size="sm">
-						{comment.upvotes}
-						<ThumbsUpIcon className="h-4 w-4 ml-2" />
+						{comment.upvotes > 0 ? (
+							<span className="mr-2">{comment.upvotes}</span>
+						) : null}
+						<ThumbsUpIcon className="h-4 w-4" />
 					</Button>
 					<Button variant="ghost" size="sm">
-						0
-						<ThumbsDownIcon className="h-4 w-4 ml-2" />
+						{comment.downvotes > 0 ? (
+							<span className="mr-2">{comment.downvotes}</span>
+						) : null}
+						<ThumbsDownIcon className="h-4 w-4" />
 					</Button>
 					<Button variant="ghost" size="sm">
 						<ReplyIcon className="h-4 w-4 mr-2" />
 						Reply
 					</Button>
-					<Button variant="ghost" size="sm">
-						<ForwardIcon className="h-4 w-4 mr-2" />
-						Share
-					</Button>
-
 					<Button variant="ghost" size="sm">
 						<MoreHorizontalIcon className="h-4 w-4" />
 					</Button>

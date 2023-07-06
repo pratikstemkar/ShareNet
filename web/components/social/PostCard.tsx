@@ -39,6 +39,7 @@ import {
 import { useAppSelector } from "@/redux/store";
 import { useGetProfileQuery } from "@/redux/features/apiSlice";
 import { Skeleton } from "../ui/skeleton";
+import { SharePop } from "./SharePop";
 
 interface PostCardProps {
 	post_id: number;
@@ -70,10 +71,7 @@ export default function PostCard({
 	} = useGetProfileQuery(user_id);
 
 	return (
-		<Card
-			className="dark:hover:border-white hover:border-black hover:cursor-pointer"
-			onClick={() => router.push(`/post/${post_id}`)}
-		>
+		<Card className="dark:hover:border-white hover:border-black">
 			<CardHeader>
 				{userLoading ? (
 					<div className="text-sm flex items-center">
@@ -82,7 +80,7 @@ export default function PostCard({
 					</div>
 				) : (
 					<div className="text-sm text-slate-500 flex items-center">
-						<Avatar className="h-4 w-4 mr-2">
+						<Avatar className="h-6 w-6 mr-2">
 							<AvatarImage src={userData.user.pfp_url} alt="ProfilePicture" />
 							<AvatarFallback>PC</AvatarFallback>
 						</Avatar>
@@ -150,7 +148,12 @@ export default function PostCard({
 						</TooltipProvider>
 					</div>
 				)}
-				<CardTitle>{title}</CardTitle>
+				<CardTitle
+					className="hover:cursor-pointer hover:text-indigo-500 text-2xl"
+					onClick={() => router.push(`/post/${post_id}`)}
+				>
+					{title}
+				</CardTitle>
 			</CardHeader>
 			<CardContent>{content}</CardContent>
 			<CardFooter>
@@ -163,13 +166,14 @@ export default function PostCard({
 						{downvotes}
 						<ThumbsDownIcon className="h-4 w-4 ml-2" />
 					</Button>
-					<Button variant="ghost" size="sm">
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={() => router.push(`/post/${post_id}`)}
+					>
 						{comment_count} Comment{comment_count > 1 ? "s" : null}
 					</Button>
-					<Button variant="ghost" size="sm">
-						<ForwardIcon className="h-4 w-4 mr-2" />
-						Share
-					</Button>
+					<SharePop postId={post_id} />
 					<Button variant="ghost" size="sm">
 						<SaveIcon className="h-4 w-4 mr-2" />
 						Save

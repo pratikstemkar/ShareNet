@@ -157,7 +157,7 @@ const PostPage = (props: { postId: string }) => {
 										</Tooltip>
 									</TooltipProvider>
 								</div>
-								<CardTitle>{post.post.title}</CardTitle>
+								<CardTitle className="text-2xl">{post.post.title}</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-5">
 								<p>{post.post.content}</p>

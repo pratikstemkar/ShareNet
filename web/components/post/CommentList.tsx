@@ -41,7 +41,7 @@ export default function CommentList(postId: { postId: string }) {
 								{commentsSuccess ? (
 									<>
 										<h4 className="text-lg font-semibold">
-											{comments.count} Comments{" "}
+											{comments.count} Comments
 										</h4>
 										{comments?.comment_list?.map((comment: any) => (
 											<Comment key={comment.comment_id} {...comment} />
