@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
+import { formatDistanceToNow } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -33,4 +34,23 @@ export function convertStringArrayToObjectArray(
 	}
 
 	return objArray;
+}
+
+export function convertTimestampToReadableTime(timestamp: string): string {
+	const date = new Date(timestamp);
+	return date.toLocaleString("en-US", {
+		weekday: "long",
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+		hour: "numeric",
+		minute: "numeric",
+		second: "numeric",
+		timeZoneName: "short",
+	});
+}
+
+export function convertTimestampToRelativeTime(timestamp: string): string {
+	const date = new Date(timestamp);
+	return formatDistanceToNow(date, { addSuffix: true });
 }

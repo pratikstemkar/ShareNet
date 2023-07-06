@@ -1,6 +1,12 @@
 "use client";
 
 import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
 	CalendarIcon,
 	ForwardIcon,
 	MoreHorizontalIcon,
@@ -26,30 +32,38 @@ import {
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {
+	convertTimestampToReadableTime,
+	convertTimestampToRelativeTime,
+} from "@/lib/utils";
 
 interface PostCardProps {
-	id: number;
+	post_id: number;
 	title: string;
-	body: string;
-	tags: Array<string>;
-	reactions: number;
-	userId: number;
+	content: string;
+	user_id: number;
+	CreatedAt: string;
+	comment_count: number;
+	upvotes: number;
+	downvotes: number;
 }
 
 export default function PostCard({
-	id,
+	post_id,
 	title,
-	body,
-	tags,
-	reactions,
-	userId,
+	content,
+	user_id,
+	CreatedAt,
+	comment_count,
+	upvotes,
+	downvotes,
 }: PostCardProps) {
 	const router = useRouter();
 
 	return (
 		<Card
 			className="dark:hover:border-white hover:border-black hover:cursor-pointer"
-			onClick={() => router.push(`/post/${id}`)}
+			onClick={() => router.push(`/post/${post_id}`)}
 		>
 			<CardHeader>
 				<div className="text-sm text-slate-500 flex items-center">
@@ -66,7 +80,7 @@ export default function PostCard({
 								href="/"
 								className="mr-2 dark:text-white text-black hover:underline"
 							>
-								India
+								{user_id}
 							</Link>
 						</HoverCardTrigger>
 						<HoverCardContent className="w-80 hover:cursor-default">
@@ -83,7 +97,7 @@ export default function PostCard({
 											<span className="font-semibold">143k</span>{" "}
 											<span className="text-slate-500">members</span>
 										</div>
-										{/* <div>56k members</div> */}
+										<div>56k members</div>
 									</div>
 									<p className="text-sm">
 										The React Framework – created and maintained by @vercel.
@@ -91,39 +105,49 @@ export default function PostCard({
 									<Button className="rounded-full w-full mt-4" size="sm">
 										Join Team
 									</Button>
-									{/* <div className="flex items-center pt-2">
-                                        <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
-                                        <span className="text-xs text-muted-foreground">
-                                            Joined December 2021
-                                        </span>
-                                    </div> */}
+									<div className="flex items-center pt-2">
+										<CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
+										<span className="text-xs text-muted-foreground">
+											Joined December 2021
+										</span>
+									</div>
 								</div>
 							</div>
 						</HoverCardContent>
 					</HoverCard>
-					<span className="mr-2">
+					{/* <span className="mr-2">
 						Posted by{" "}
 						<Link href="/" className="hover:underline">
-							Pratik{userId}
+							{user_id}
 						</Link>{" "}
-					</span>
-					<span>4 Hours ago</span>
+					</span> */}
+
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger>
+								<span>{convertTimestampToRelativeTime(CreatedAt)}</span>
+							</TooltipTrigger>
+							<TooltipContent>
+								<p>{convertTimestampToReadableTime(CreatedAt)}</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 				</div>
 				<CardTitle>{title}</CardTitle>
 			</CardHeader>
-			<CardContent>{body}</CardContent>
+			<CardContent>{content}</CardContent>
 			<CardFooter>
 				<div className="flex">
 					<Button variant="ghost" size="sm">
-						{reactions}
+						{upvotes}
 						<ThumbsUpIcon className="h-4 w-4 ml-2" />
 					</Button>
 					<Button variant="ghost" size="sm">
-						0
+						{downvotes}
 						<ThumbsDownIcon className="h-4 w-4 ml-2" />
 					</Button>
 					<Button variant="ghost" size="sm">
-						23 Comments
+						{comment_count} Comment{comment_count > 1 ? "s" : null}
 					</Button>
 					<Button variant="ghost" size="sm">
 						<ForwardIcon className="h-4 w-4 mr-2" />

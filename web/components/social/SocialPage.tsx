@@ -26,10 +26,7 @@ import {
 import { Input } from "../ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-	useGetAllPostsQuery,
-	useGetAllProductsQuery,
-} from "@/redux/features/apiSlice";
+import { useGetAllPostsQuery } from "@/redux/features/apiSlice";
 import PostCard from "./PostCard";
 import { Skeleton } from "../ui/skeleton";
 import PostCardSkeleton from "./PostCardSkeleton";
@@ -68,10 +65,13 @@ export default function SocialPage() {
 					</Card>
 				) : null}
 				<div className="space-y-5">
+					{/* <p>{isLoading ? null : JSON.stringify(data)}</p> */}
 					{isLoading ? (
 						<PostCardSkeleton />
 					) : (
-						data.posts?.map((post: any) => <PostCard key={post.id} {...post} />)
+						data.post_list?.map((post: any) => (
+							<PostCard key={post.post_id} {...post} />
+						))
 					)}
 				</div>
 			</div>

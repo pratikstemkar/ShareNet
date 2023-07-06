@@ -1,6 +1,12 @@
 "use client";
 
 import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
 	Card,
 	CardContent,
 	CardHeader,
@@ -39,6 +45,11 @@ import {
 	useGetPostCommentsQuery,
 	useGetPostQuery,
 } from "@/redux/features/apiSlice";
+import {
+	convertTimestampToReadableTime,
+	convertTimestampToRelativeTime,
+} from "@/lib/utils";
+import { useAppSelector } from "@/redux/store";
 
 const FormSchema = z.object({
 	comment: z
@@ -53,6 +64,8 @@ const FormSchema = z.object({
 
 const PostPage = (props: { postId: string }) => {
 	const { toast } = useToast();
+
+	const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
 
 	const { data: post, isSuccess: postSuccess } = useGetPostQuery(props.postId);
 	const { data: comments, isSuccess: commentsSuccess } =
@@ -83,21 +96,34 @@ const PostPage = (props: { postId: string }) => {
 								<div className="text-sm text-slate-500">
 									Posted by{" "}
 									<Link href="/profile" className="hover:underline mr-2">
-										user{post.userId}
+										{post.post.user_id}
 									</Link>
-									<span className="text-sm">4 Hours ago</span>
+									<TooltipProvider>
+										<Tooltip>
+											<TooltipTrigger>
+												<span>
+													{convertTimestampToRelativeTime(post.post.CreatedAt)}
+												</span>
+											</TooltipTrigger>
+											<TooltipContent>
+												<p>
+													{convertTimestampToReadableTime(post.post.CreatedAt)}
+												</p>
+											</TooltipContent>
+										</Tooltip>
+									</TooltipProvider>
 								</div>
-								<CardTitle>{post.title}</CardTitle>
+								<CardTitle>{post.post.title}</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-5">
-								<p>{post.body}</p>
+								<p>{post.post.content}</p>
 								<div className="flex">
 									<Button variant="ghost" size="sm">
-										{post.reactions}
+										{post.post.upvotes}
 										<ThumbsUpIcon className="h-4 w-4 ml-2" />
 									</Button>
 									<Button variant="ghost" size="sm">
-										0
+										{post.post.downvotes}
 										<ThumbsDownIcon className="h-4 w-4 ml-2" />
 									</Button>
 									<Button variant="ghost" size="sm">
@@ -112,47 +138,49 @@ const PostPage = (props: { postId: string }) => {
 										<MoreHorizontalIcon className="h-4 w-4" />
 									</Button>
 								</div>
-								<div>
-									<Form {...form}>
-										<form
-											onSubmit={form.handleSubmit(onSubmit)}
-											className="w-full space-y-2"
-										>
-											<FormField
-												control={form.control}
-												name="comment"
-												render={({ field }) => (
-													<FormItem>
-														<FormLabel>Comment</FormLabel>
-														<FormControl>
-															<Textarea
-																placeholder="What are your thoughts?"
-																className="resize-none"
-																rows={5}
-																{...field}
-															/>
-														</FormControl>
-														<FormDescription>
-															You can <span>@mention</span> other users and
-															teams.
-														</FormDescription>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
-											<Button type="submit">Comment</Button>
-										</form>
-									</Form>
-								</div>
+								{isAuth ? (
+									<div>
+										<Form {...form}>
+											<form
+												onSubmit={form.handleSubmit(onSubmit)}
+												className="w-full space-y-2"
+											>
+												<FormField
+													control={form.control}
+													name="comment"
+													render={({ field }) => (
+														<FormItem>
+															<FormLabel>Comment</FormLabel>
+															<FormControl>
+																<Textarea
+																	placeholder="What are your thoughts?"
+																	className="resize-none"
+																	rows={5}
+																	{...field}
+																/>
+															</FormControl>
+															<FormDescription>
+																You can <span>@mention</span> other users and
+																teams.
+															</FormDescription>
+															<FormMessage />
+														</FormItem>
+													)}
+												/>
+												<Button type="submit">Comment</Button>
+											</form>
+										</Form>
+									</div>
+								) : null}
 								<Separator />
 								<div className="space-y-5">
 									{commentsSuccess ? (
 										<>
 											<h4 className="text-lg font-semibold">
-												{comments.total} Comments
+												{comments.count} Comments
 											</h4>
-											{comments?.comments.map((comment: any) => (
-												<div className="space-y-2" key={comment.id}>
+											{comments?.comment_list?.map((comment: any) => (
+												<div className="space-y-2" key={comment.comment_id}>
 													<div className="flex items-center">
 														<Avatar className="h-8 w-8 mr-2">
 															<AvatarImage
@@ -165,13 +193,28 @@ const PostPage = (props: { postId: string }) => {
 															href="/profile"
 															className="mr-2 hover:underline"
 														>
-															{comment.user.username}
+															{comment.user_id}
 														</Link>
-														<span className="text-sm text-slate-500">
-															4 Hours ago
-														</span>
+														<TooltipProvider>
+															<Tooltip>
+																<TooltipTrigger>
+																	<span className="text-sm text-slate-500">
+																		{convertTimestampToRelativeTime(
+																			comment.CreatedAt
+																		)}
+																	</span>
+																</TooltipTrigger>
+																<TooltipContent>
+																	<p>
+																		{convertTimestampToReadableTime(
+																			comment.CreatedAt
+																		)}
+																	</p>
+																</TooltipContent>
+															</Tooltip>
+														</TooltipProvider>
 													</div>
-													<p className="text-sm">{comment.body}</p>
+													<p className="text-sm">{comment.content}</p>
 													<div className="flex">
 														<Button variant="ghost" size="sm">
 															24
