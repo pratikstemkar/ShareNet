@@ -18,9 +18,11 @@ import PostList from "./PostList";
 export default function SocialPage() {
 	const router = useRouter();
 
-	const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
-	const pfp_url = useAppSelector((state) => state.authReducer.value.pfp_url);
-	const roles = useAppSelector((state) => state.authReducer.value.roles);
+	const isAuth = useAppSelector((state) => state.persistedReducer.value.isAuth);
+	const pfp_url = useAppSelector(
+		(state) => state.persistedReducer.value.pfp_url
+	);
+	const roles = useAppSelector((state) => state.persistedReducer.value.roles);
 
 	return (
 		<div className="grid grid-cols-4 gap-5">

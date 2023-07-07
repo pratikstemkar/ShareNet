@@ -84,7 +84,9 @@ const ImgFormSchema = z.object({
 const SubmitPost = () => {
 	const [selectedImage, setSelectedImage] = useState<File | undefined>();
 	const { toast } = useToast();
-	const user_id = useAppSelector((state) => state.authReducer.value.user_id);
+	const user_id = useAppSelector(
+		(state) => state.persistedReducer.value.user_id
+	);
 	const router = useRouter();
 
 	const [

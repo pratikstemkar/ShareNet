@@ -73,7 +73,7 @@ const FormSchema = z.object({
 
 const PostPage = (props: { postId: string }) => {
 	const { toast } = useToast();
-	const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
+	const isAuth = useAppSelector((state) => state.persistedReducer.value.isAuth);
 
 	const {
 		data: post,

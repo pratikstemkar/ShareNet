@@ -36,10 +36,16 @@ import { useToast } from "../ui/use-toast";
 import { useCookies } from "react-cookie";
 
 export function UserNav() {
-	const email = useAppSelector((state) => state.authReducer.value.email);
-	const username = useAppSelector((state) => state.authReducer.value.username);
-	const user_id = useAppSelector((state) => state.authReducer.value.user_id);
-	const pfp_url = useAppSelector((state) => state.authReducer.value.pfp_url);
+	const email = useAppSelector((state) => state.persistedReducer.value.email);
+	const username = useAppSelector(
+		(state) => state.persistedReducer.value.username
+	);
+	const user_id = useAppSelector(
+		(state) => state.persistedReducer.value.user_id
+	);
+	const pfp_url = useAppSelector(
+		(state) => state.persistedReducer.value.pfp_url
+	);
 
 	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();

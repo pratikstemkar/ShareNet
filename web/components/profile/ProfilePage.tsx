@@ -6,7 +6,9 @@ import { SettingProfile } from "./SettingProfile";
 import { ProfileTab } from "./ProfileTab";
 
 export default function ProfilePage(props: { userId: string }) {
-	const user_id = useAppSelector((state) => state.authReducer.value.user_id);
+	const user_id = useAppSelector(
+		(state) => state.persistedReducer.value.user_id
+	);
 
 	return (
 		<main className="max-w-5xl m-auto">

@@ -4,7 +4,7 @@ import { useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
-	const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
+	const isAuth = useAppSelector((state) => state.persistedReducer.value.isAuth);
 	const router = useRouter();
 
 	if (isAuth) {

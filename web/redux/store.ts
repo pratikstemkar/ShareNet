@@ -4,10 +4,20 @@ import { postApi } from "@/redux/features/apiSlice";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 import { authApi } from "./features/authApi";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
+import storage from "redux-persist/lib/storage";
+import { persistStore, persistReducer } from "redux-persist";
+import thunk from "redux-thunk";
+
+const persistConfig = {
+	key: "root",
+	storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, authReducer);
 
 export const store = configureStore({
 	reducer: {
-		authReducer,
+		persistedReducer,
 		[postApi.reducerPath]: postApi.reducer,
 		[authApi.reducerPath]: authApi.reducer,
 	},
@@ -17,6 +27,7 @@ export const store = configureStore({
 			.concat(authApi.middleware),
 });
 
+export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 setupListeners(store.dispatch);

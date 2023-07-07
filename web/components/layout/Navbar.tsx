@@ -11,8 +11,8 @@ import Image from "next/image";
 import { SearchBar } from "./SearchBar";
 
 const Navbar = () => {
-	const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
-	const roles = useAppSelector((state) => state.authReducer.value.roles);
+	const isAuth = useAppSelector((state) => state.persistedReducer.value.isAuth);
+	const roles = useAppSelector((state) => state.persistedReducer.value.roles);
 
 	return (
 		<header className="sticky top-0 z-10  border dark:bg-slate-950 bg-white">
