@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/gorilla/securecookie"
 	"github.com/pratikstemkar/matchup/internal/database"
 	"github.com/pratikstemkar/matchup/internal/models"
 	"github.com/pratikstemkar/matchup/internal/services"
@@ -52,6 +53,33 @@ func Register(c *gin.Context) {
 		"message": "User Created",
 	})
 }
+
+var cookieHandler = securecookie.New(
+    securecookie.GenerateRandomKey(64),
+    securecookie.GenerateRandomKey(32),
+)
+
+
+func setAccessTokenCookie(c *gin.Context, accessToken string) {
+    value := map[string]string{
+        "access_token": accessToken,
+    }
+    encodedValue, err := cookieHandler.Encode("cookie-name", value)
+    if err != nil {
+        // Handle the error
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+        return
+    }
+
+    cookie := &http.Cookie{
+        Name:     "cookie-name",
+        Value:    encodedValue,
+        Path:     "/",
+        HttpOnly: true,
+    }
+    http.SetCookie(c.Writer, cookie)
+}
+
 
 // @route /api/v1/login
 // @desc Authenticate user & get Token
@@ -102,6 +130,8 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
+
+	c.SetCookie("access_token", accessTokenString, 3600*24, "/", "localhost", false, true)
 
 	// Send it back
 	c.JSON(http.StatusOK, gin.H{
