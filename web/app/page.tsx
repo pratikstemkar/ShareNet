@@ -11,6 +11,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Radio } from "lucide-react";
 import Link from "next/link";
 
+export const metadata = {
+	title: process.env.NEXT_PUBLIC_APP_NAME,
+	description: "Cricket Ball by Ball Commentary",
+};
+
 export default function Page() {
 	return (
 		<main className="flex flex-col items-center justify-center max-w-5xl m-auto mt-5">

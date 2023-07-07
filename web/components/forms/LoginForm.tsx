@@ -1,5 +1,6 @@
 "use client";
 
+import { useCookies } from "react-cookie";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -43,6 +44,7 @@ const formSchema = z.object({
 
 export function LoginForm() {
 	const dispatch = useDispatch<AppDispatch>();
+	const [cookie, setCookie] = useCookies();
 	const router = useRouter();
 	const { toast } = useToast();
 	const [
@@ -81,6 +83,16 @@ export function LoginForm() {
 		if (loginSuccess) {
 			if (results && results.data) {
 				console.log(results.data);
+				setCookie("access_token", loginData.access_token, {
+					path: "/",
+					maxAge: 3600 * 24,
+					sameSite: true,
+				});
+				setCookie("refresh_token", loginData.refresh_token, {
+					path: "/",
+					maxAge: 3600 * 24,
+					sameSite: true,
+				});
 				dispatch(
 					setUser({
 						username: results.data.user.username,

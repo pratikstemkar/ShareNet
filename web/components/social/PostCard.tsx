@@ -87,7 +87,7 @@ export default function PostCard({
 						<HoverCard>
 							<HoverCardTrigger asChild>
 								<Link
-									href="/"
+									href={`/profile/${user_id}`}
 									className="mr-2 dark:text-white text-black hover:underline"
 								>
 									{userData.user.username}

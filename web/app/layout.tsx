@@ -7,11 +7,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { ReduxApiProvider } from "@/redux/ReduxApiProvide";
 import { AuthApiProvider } from "@/redux/AuthApiProvider";
 
-export const metadata = {
-	title: process.env.NEXT_PUBLIC_APP_NAME,
-	description: "Cricket Ball by Ball Commentary",
-};
-
 export default function RootLayout({
 	children,
 }: {

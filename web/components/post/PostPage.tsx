@@ -57,6 +57,8 @@ import PostCardSkeleton from "../social/PostCardSkeleton";
 import { useEffect } from "react";
 import { Skeleton } from "../ui/skeleton";
 import CommentList from "./CommentList";
+import { ToastAction } from "../ui/toast";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
 	comment: z
@@ -71,7 +73,6 @@ const FormSchema = z.object({
 
 const PostPage = (props: { postId: string }) => {
 	const { toast } = useToast();
-
 	const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
 
 	const {
@@ -113,6 +114,7 @@ const PostPage = (props: { postId: string }) => {
 		}
 		if (commentError) {
 			toast({
+				variant: "destructive",
 				title: "Comment Submission Failed!",
 			});
 		}

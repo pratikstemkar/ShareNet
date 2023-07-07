@@ -16,10 +16,11 @@ export default function PostList() {
 					<PostCardSkeleton />
 				</>
 			) : (
-				data.post_list?.map((post: any) => (
+				data?.post_list?.map((post: any) => (
 					<PostCard key={post.post_id} {...post} />
 				))
 			)}
+			{isError ? <>Error occured while fetching posts.</> : null}
 		</>
 	);
 }

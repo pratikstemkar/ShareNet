@@ -44,12 +44,12 @@ const Navbar = () => {
 						</>
 					) : (
 						<>
-							<Link href="/auth/login">
+							<Link href="/login">
 								<Button variant="outline" size="sm">
 									Login
 								</Button>
 							</Link>
-							<Link href="/auth/register">
+							<Link href="/register">
 								<Button variant="outline" size="sm">
 									Create Account
 								</Button>

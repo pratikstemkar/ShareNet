@@ -33,6 +33,7 @@ import { logOut } from "@/redux/features/authSlice";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useToast } from "../ui/use-toast";
+import { useCookies } from "react-cookie";
 
 export function UserNav() {
 	const email = useAppSelector((state) => state.authReducer.value.email);
@@ -45,8 +46,11 @@ export function UserNav() {
 	const { setTheme } = useTheme();
 	const { toast } = useToast();
 
+	const [cookies, setCookie, removeCookie] = useCookies(["access_token"]);
+
 	const onClickLogOut = () => {
 		dispatch(logOut());
+		removeCookie("access_token");
 	};
 
 	return (

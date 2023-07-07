@@ -2,21 +2,36 @@
 
 import { useAppSelector } from "@/redux/store";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+import { useGetProfileQuery } from "@/redux/features/apiSlice";
+import { Skeleton } from "../ui/skeleton";
 
-export default function ProfileAvatar() {
-	const email = useAppSelector((state) => state.authReducer.value.email);
-	const username = useAppSelector((state) => state.authReducer.value.username);
-	const pfp_url = useAppSelector((state) => state.authReducer.value.pfp_url);
+export default function ProfileAvatar(props: { userId: string }) {
+	const { data, isLoading, isSuccess, isError } = useGetProfileQuery(
+		props.userId
+	);
+
 	return (
 		<>
-			<Avatar className="h-40 w-40 mr-5">
-				<AvatarImage src={pfp_url} alt="ProfilePicture" />
-				<AvatarFallback>PC</AvatarFallback>
-			</Avatar>
-			<div>
-				<div className="text-lg font-extrabold">{username}</div>
-				<div className="text-sm">i am good for nothing</div>
-			</div>
+			{isLoading ? (
+				<>
+					<Skeleton className="h-40 w-40 rounded-full mr-5" />
+					<div>
+						<Skeleton className="h-4 w-[100px]" />
+						<Skeleton className="h-4 w-[200px] mt-2" />
+					</div>
+				</>
+			) : (
+				<>
+					<Avatar className="h-40 w-40 mr-5">
+						<AvatarImage src={data.user.pfp_url} alt="ProfilePicture" />
+						<AvatarFallback>PC</AvatarFallback>
+					</Avatar>
+					<div>
+						<div className="text-lg font-extrabold">{data.user.username}</div>
+						<div className="text-sm">i am good for nothing</div>
+					</div>
+				</>
+			)}
 		</>
 	);
 }
