@@ -57,8 +57,6 @@ import PostCardSkeleton from "../social/PostCardSkeleton";
 import { useEffect } from "react";
 import { Skeleton } from "../ui/skeleton";
 import CommentList from "./CommentList";
-import { ToastAction } from "../ui/toast";
-import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
 	comment: z
