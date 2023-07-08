@@ -34,8 +34,11 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useToast } from "../ui/use-toast";
 import { useCookies } from "react-cookie";
+import { signOut } from "next-auth/react";
 
-export function UserNav() {
+export function UserNav(data: {
+	user: { name: string; email: string; image: string; id: string };
+}) {
 	const email = useAppSelector((state) => state.persistedReducer.value.email);
 	const username = useAppSelector(
 		(state) => state.persistedReducer.value.username
@@ -57,6 +60,7 @@ export function UserNav() {
 	const onClickLogOut = () => {
 		dispatch(logOut());
 		removeCookie("access_token");
+		signOut();
 	};
 
 	return (
@@ -67,7 +71,7 @@ export function UserNav() {
 					className="relative h-8 w-8 rounded-full shadow"
 				>
 					<Avatar className="h-8 w-8">
-						<AvatarImage src={pfp_url} alt="@shadcn" />
+						<AvatarImage src={data.user.image} alt="@shadcn" />
 						<AvatarFallback>SC</AvatarFallback>
 					</Avatar>
 				</Button>
@@ -75,11 +79,13 @@ export function UserNav() {
 			<DropdownMenuContent className="w-56" align="end" forceMount>
 				<DropdownMenuLabel className="font-normal">
 					<div className="flex flex-col space-y-1">
-						{username && (
-							<p className="text-sm font-medium leading-none">{username}</p>
+						{data.user.name && (
+							<p className="text-sm font-medium leading-none">
+								{data.user.name}
+							</p>
 						)}
 						<p className="text-xs leading-none text-muted-foreground">
-							{email}
+							{data.user.email}
 						</p>
 					</div>
 				</DropdownMenuLabel>
@@ -147,7 +153,6 @@ export function UserNav() {
 				<DropdownMenuItem
 					onClick={() => {
 						onClickLogOut();
-						// router.push("/");
 						toast({
 							title: "Successfully Logged Out!",
 							description: "Friday, February 10, 2023 at 5:57 PM",

@@ -12,7 +12,7 @@ func CreateComment(comment *models.Comment) (*models.Comment, error) {
 	if res.RowsAffected == 0 {
 		return &models.Comment{}, errors.New("comment not created")
 	}
-	err := DB.Model(&models.Post{}).Where("post_id = ?", comment.Post_Id).UpdateColumn("comment_count", gorm.Expr("comment_count + ?", 1)).Error
+	err := DB.Model(&models.Post{}).Where("post_id = ?", comment.PostId).UpdateColumn("comment_count", gorm.Expr("comment_count + ?", 1)).Error
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func ReadCommentList() ([]*models.Comment, error) {
 
 func UpdateComment(comment *models.Comment) (*models.Comment, error) {
 	var updateComment models.Comment
-	res := DB.Model(&updateComment).Where("comment = ?", comment.Comment_Id).Updates(comment)
+	res := DB.Model(&updateComment).Where("comment = ?", comment.Id).Updates(comment)
 	if res.RowsAffected == 0 {
 		return &models.Comment{}, errors.New("comment not updated")
 	}

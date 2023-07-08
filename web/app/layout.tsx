@@ -6,6 +6,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ReduxApiProvider } from "@/redux/ReduxApiProvide";
 import { AuthApiProvider } from "@/redux/AuthApiProvider";
+import AuthProvider from "./context/AuthProvider";
 
 export default function RootLayout({
 	children,
@@ -16,20 +17,22 @@ export default function RootLayout({
 		<html lang="en">
 			<body>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-					<AuthApiProvider>
-						<ReduxApiProvider>
-							<ReduxProvider>
-								<div className="min-h-screen flex flex-col justify-between">
-									<div>
-										<Navbar />
-										{children}
+					<AuthProvider>
+						<AuthApiProvider>
+							<ReduxApiProvider>
+								<ReduxProvider>
+									<div className="min-h-screen flex flex-col justify-between">
+										<div>
+											<Navbar />
+											{children}
+										</div>
+										<Toaster />
+										<Footer />
 									</div>
-									<Toaster />
-									<Footer />
-								</div>
-							</ReduxProvider>
-						</ReduxApiProvider>
-					</AuthApiProvider>
+								</ReduxProvider>
+							</ReduxApiProvider>
+						</AuthApiProvider>
+					</AuthProvider>
 				</ThemeProvider>
 			</body>
 		</html>

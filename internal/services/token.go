@@ -17,7 +17,7 @@ func CreateAccessToken(user_id string, expTime time.Duration) (string, error) {
 
 	var roles []string
 	for _, role := range user.Roles{
-		roles = append(roles, role.Rolename)
+		roles = append(roles, role.Name)
 	}
 	
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,

@@ -36,6 +36,8 @@ import {
 } from "@/redux/features/authApi";
 import { useEffect, useState } from "react";
 import { setUser } from "@/redux/features/authSlice";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50).email(),
@@ -69,14 +71,21 @@ export function LoginForm() {
 	});
 
 	// 2. Define a submit handler.
-	function onSubmit(values: z.infer<typeof formSchema>) {
+	async function onSubmit(values: z.infer<typeof formSchema>) {
 		// Do something with the form values.
 		// ✅ This will be type-safe and validated.
 
-		if (values.email && values.password) {
-			loginUser({ email: values.email, password: values.password });
-			trigger(values.email);
-		}
+		// if (values.email && values.password) {
+		// 	loginUser({ email: values.email, password: values.password });
+		// 	trigger(values.email);
+		// 	form.reset();
+		// }
+
+		await signIn("credentials", {
+			email: values.email,
+			password: values.password,
+			callbackUrl: "/",
+		});
 	}
 
 	useEffect(() => {
@@ -127,57 +136,15 @@ export function LoginForm() {
 					Enter your email below to login to your account
 				</CardDescription>
 			</CardHeader>
-			{/* <CardContent className="grid gap-4">
-				<div className="grid grid-cols-2 gap-6">
-					<Button variant="outline">
-						<Icons.gitHub className="mr-2 h-4 w-4" />
-						Github
-					</Button>
-					<Button variant="outline">
-						<Icons.google className="mr-2 h-4 w-4" />
-						Google
-					</Button>
-				</div>
-				<div className="relative">
-					<div className="absolute inset-0 flex items-center">
-						<span className="w-full border-t" />
-					</div>
-					<div className="relative flex justify-center text-xs uppercase">
-						<span className="bg-background px-2 text-muted-foreground">
-							Or continue with
-						</span>
-					</div>
-				</div>
-				<div className="grid gap-2">
-					<Label htmlFor="email">Email</Label>
-					<Input
-						id="email"
-						type="email"
-						placeholder="m@example.com"
-						onChange={(e) => setEmail(e.target.value)}
-					/>
-					{email}
-				</div>
-				<div className="grid gap-2">
-					<Label htmlFor="password">Password</Label>
-					<Input id="password" type="password" />
-				</div>
-			</CardContent>
-			<CardFooter>
-				<Button className="w-full" onClick={onClickLogIn}>
-					Sign In
-				</Button>
-			</CardFooter> */}
-
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
 					<CardContent className="grid gap-4">
 						<div className="grid grid-cols-2 gap-6">
-							<Button variant="outline">
+							<Button variant="outline" onClick={() => signIn("github")}>
 								<Icons.gitHub className="mr-2 h-4 w-4" />
 								Github
 							</Button>
-							<Button variant="outline">
+							<Button variant="outline" onClick={() => signIn("google")}>
 								<Icons.google className="mr-2 h-4 w-4" />
 								Google
 							</Button>

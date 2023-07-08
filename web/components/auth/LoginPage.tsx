@@ -1,14 +1,13 @@
 "use client";
 import { LoginForm } from "@/components/forms/LoginForm";
-import { useAppSelector } from "@/redux/store";
-import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function LoginPage() {
-	const isAuth = useAppSelector((state) => state.persistedReducer.value.isAuth);
-	const router = useRouter();
+	const { data, status } = useSession();
 
-	if (isAuth) {
-		return router.push("/");
+	if (status === "authenticated") {
+		return redirect("/");
 	}
 
 	return (

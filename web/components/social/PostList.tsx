@@ -20,7 +20,7 @@ export default function PostList() {
 					<PostCard key={post.post_id} {...post} />
 				))
 			)}
-			{isError ? <>Error occured while fetching posts.</> : null}
+			{isError ? <div>Error occured while fetching posts.</div> : null}
 		</>
 	);
 }

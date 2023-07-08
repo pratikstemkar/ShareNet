@@ -35,7 +35,7 @@ func ReadRoleList() ([]*models.Role, error) {
 
 func UpdateRole(role *models.Role) (*models.Role, error) {
 	var updateRole models.Role
-	res := DB.Model(&updateRole).Where("role_id = ?", role.Role_Id).Updates(role)
+	res := DB.Model(&updateRole).Where("role_id = ?", role.Id).Updates(role)
 	if res.RowsAffected == 0 {
 		return &models.Role{}, errors.New("role not updated")
 	}

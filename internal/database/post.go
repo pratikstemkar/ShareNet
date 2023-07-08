@@ -48,7 +48,7 @@ func ReadPostList() ([]*models.Post, error) {
 
 func UpdatePost(post *models.Post) (*models.Post, error) {
 	var updatePost models.Post
-	res := DB.Model(&updatePost).Where("post_id = ?", post.Post_Id).Updates(post)
+	res := DB.Model(&updatePost).Where("post_id = ?", post.Id).Updates(post)
 	if res.RowsAffected == 0 {
 		return &models.Post{}, errors.New("post not updated")
 	}

@@ -32,9 +32,11 @@ import { useToast } from "../ui/use-toast";
 import { useRegisterUserMutation } from "@/redux/features/authApi";
 import { useEffect } from "react";
 
+import { signIn } from "next-auth/react";
+
 const formSchema = z.object({
-	email: z.string().min(2).max(50).email(),
-	password: z.string().min(5).max(18),
+	email: z.string().min(10).max(20).email(),
+	password: z.string().min(8).max(20),
 });
 
 export function RegisterForm() {
@@ -55,17 +57,46 @@ export function RegisterForm() {
 	});
 
 	// 2. Define a submit handler.
-	function onSubmit(values: z.infer<typeof formSchema>) {
+	async function onSubmit(values: z.infer<typeof formSchema>) {
 		// Do something with the form values.
 		// ✅ This will be type-safe and validated.
 
-		if (values.email && values.password) {
-			registerUser({
+		// registerUser({
+		// 	email: values.email,
+		// 	password: values.password,
+		// 	roles: [{ rolename: "user" }],
+		// });
+
+		console.log(
+			JSON.stringify({
 				email: values.email,
 				password: values.password,
-				roles: [{ rolename: "user" }],
+			})
+		);
+
+		const res = await fetch("/api/register", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				email: values.email,
+				password: values.password,
+			}),
+		});
+
+		const data = await res.json();
+		if (!data.user) {
+			toast({
+				title: "Registration Failed!",
 			});
+			return null;
 		}
+		await signIn("credentials", {
+			email: data.user.email,
+			password: values.password,
+			callbackUrl: "/",
+		});
 	}
 
 	useEffect(() => {

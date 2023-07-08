@@ -9,10 +9,13 @@ import { Badge } from "../ui/badge";
 import { NotiPop } from "./NotiPop";
 import Image from "next/image";
 import { SearchBar } from "./SearchBar";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
 	const isAuth = useAppSelector((state) => state.persistedReducer.value.isAuth);
 	const roles = useAppSelector((state) => state.persistedReducer.value.roles);
+
+	const { data, status, update } = useSession();
 
 	return (
 		<header className="sticky top-0 z-10  border dark:bg-slate-950 bg-white">
@@ -36,11 +39,11 @@ const Navbar = () => {
 				</h1>
 
 				<div className="space-x-5 items-center flex">
-					{isAuth ? (
+					{status == "authenticated" ? (
 						<>
 							<SearchBar />
 							<NotiPop />
-							<UserNav />
+							<UserNav {...data} />
 						</>
 					) : (
 						<>
