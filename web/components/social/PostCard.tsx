@@ -23,12 +23,12 @@ import {
 	HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "../ui/card";
+	CardPost,
+	CardContentPost,
+	CardFooterPost,
+	CardHeaderPost,
+	CardTitlePost,
+} from "../ui/post-card";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -40,9 +40,11 @@ import { useAppSelector } from "@/redux/store";
 import { useGetProfileQuery } from "@/redux/features/apiSlice";
 import { Skeleton } from "../ui/skeleton";
 import { SharePop } from "./SharePop";
+import { Badge } from "../ui/badge";
+import { PostDropdown } from "./PostDropdown";
 
 interface PostCardProps {
-	post_id: number;
+	id: number;
 	title: string;
 	content: string;
 	user_id: number;
@@ -53,7 +55,7 @@ interface PostCardProps {
 }
 
 export default function PostCard({
-	post_id,
+	id,
 	title,
 	content,
 	user_id,
@@ -64,6 +66,10 @@ export default function PostCard({
 }: PostCardProps) {
 	const router = useRouter();
 
+	const app_user_id = useAppSelector(
+		(state) => state.persistedReducer.value.id
+	);
+
 	const {
 		data: userData,
 		isSuccess: userSuccess,
@@ -71,8 +77,8 @@ export default function PostCard({
 	} = useGetProfileQuery(user_id);
 
 	return (
-		<Card className="dark:hover:border-white hover:border-black">
-			<CardHeader>
+		<CardPost className="dark:hover:border-white hover:border-black">
+			<CardHeaderPost>
 				{userLoading ? (
 					<div className="text-sm flex items-center">
 						<Skeleton className="h-4 w-4 mr-2" />
@@ -80,8 +86,8 @@ export default function PostCard({
 					</div>
 				) : (
 					<div className="text-sm text-slate-500 flex items-center">
-						<Avatar className="h-6 w-6 mr-2">
-							<AvatarImage src={userData.user.pfp_url} alt="ProfilePicture" />
+						<Avatar className="h-4 w-4 mr-2">
+							<AvatarImage src={userData.user.image} alt="ProfilePicture" />
 							<AvatarFallback>PC</AvatarFallback>
 						</Avatar>
 						<HoverCard>
@@ -96,7 +102,7 @@ export default function PostCard({
 							<HoverCardContent className="w-80 hover:cursor-default">
 								<div className="flex justify-between space-x-4">
 									<Avatar>
-										<AvatarImage src={userData.user.pfp_url} />
+										<AvatarImage src={userData.user.image} />
 										<AvatarFallback>VC</AvatarFallback>
 									</Avatar>
 
@@ -148,41 +154,40 @@ export default function PostCard({
 						</TooltipProvider>
 					</div>
 				)}
-				<CardTitle
-					className="hover:cursor-pointer hover:text-indigo-500 text-2xl"
-					onClick={() => router.push(`/post/${post_id}`)}
+				<CardTitlePost
+					className="hover:cursor-pointer hover:text-indigo-500 text-xl flex items-center"
+					onClick={() => router.push(`/post/${id}`)}
 				>
 					{title}
-				</CardTitle>
-			</CardHeader>
-			<CardContent>{content}</CardContent>
-			<CardFooter>
-				<div className="flex">
+				</CardTitlePost>
+			</CardHeaderPost>
+			<CardContentPost>{content}</CardContentPost>
+			<CardFooterPost>
+				<div className="flex items-center">
 					<Button variant="ghost" size="sm">
-						{upvotes}
-						<ThumbsUpIcon className="h-4 w-4 ml-2" />
+						{upvotes > 0 ? <span className="mr-2">{upvotes}</span> : null}
+						<ThumbsUpIcon className="h-4 w-4" />
 					</Button>
+					<span className="font-mono">{upvotes - downvotes}</span>
 					<Button variant="ghost" size="sm">
-						{downvotes}
-						<ThumbsDownIcon className="h-4 w-4 ml-2" />
+						{downvotes > 0 ? <span className="mr-2">{downvotes}</span> : null}
+						<ThumbsDownIcon className="h-4 w-4" />
 					</Button>
 					<Button
 						variant="ghost"
 						size="sm"
-						onClick={() => router.push(`/post/${post_id}`)}
+						onClick={() => router.push(`/post/${id}`)}
 					>
 						{comment_count} Comment{comment_count > 1 ? "s" : null}
 					</Button>
-					<SharePop postId={post_id} />
-					<Button variant="ghost" size="sm">
+					<SharePop postId={id.toString()} />
+					{/* <Button variant="ghost" size="sm">
 						<SaveIcon className="h-4 w-4 mr-2" />
 						Save
-					</Button>
-					<Button variant="ghost" size="sm">
-						<MoreHorizontalIcon className="h-4 w-4" />
-					</Button>
+					</Button> */}
+					{app_user_id === user_id.toString() ? <PostDropdown /> : null}
 				</div>
-			</CardFooter>
-		</Card>
+			</CardFooterPost>
+		</CardPost>
 	);
 }

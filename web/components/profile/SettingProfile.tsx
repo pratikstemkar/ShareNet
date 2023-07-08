@@ -44,12 +44,8 @@ export function SettingProfile() {
 	const username = useAppSelector(
 		(state) => state.persistedReducer.value.username
 	);
-	const pfp_url = useAppSelector(
-		(state) => state.persistedReducer.value.pfp_url
-	);
-	const user_id = useAppSelector(
-		(state) => state.persistedReducer.value.user_id
-	);
+	const pfp_url = useAppSelector((state) => state.persistedReducer.value.image);
+	const user_id = useAppSelector((state) => state.persistedReducer.value.id);
 
 	const { toast } = useToast();
 
@@ -79,10 +75,12 @@ export function SettingProfile() {
 		// ✅ This will be type-safe and validated.
 		if (values.email && values.username && values.pfp_url) {
 			updateUser({
-				user_id,
+				id: user_id,
 				username: values.username,
+				bio: "",
+				name: "",
 				email: values.email,
-				pfp_url: values.pfp_url,
+				image: values.pfp_url,
 			});
 		}
 	}

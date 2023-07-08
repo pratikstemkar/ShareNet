@@ -11,7 +11,7 @@ import {
 import { ForwardIcon } from "lucide-react";
 import { useToast } from "../ui/use-toast";
 
-export function SharePop(props: { postId: number }) {
+export function SharePop(props: { postId: string }) {
 	const { toast } = useToast();
 	const copyLink = () => {
 		copy(`http://localhost:3000/post/${props.postId}`);

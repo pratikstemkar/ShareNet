@@ -7,9 +7,11 @@ type InitialState = {
 type AuthState = {
 	isAuth: boolean;
 	username: string;
+	name: string;
+	bio: string;
 	email: string;
-	user_id: string;
-	pfp_url: string;
+	id: string;
+	image: string;
 	access_token: string;
 	refresh_token: string;
 	roles: Array<string>;
@@ -20,8 +22,10 @@ const initialState = {
 		isAuth: false,
 		username: "",
 		email: "",
-		user_id: "",
-		pfp_url: "",
+		bio: "",
+		name: "",
+		id: "",
+		image: "",
 		access_token: "",
 		refresh_token: "",
 		roles: [],
@@ -42,8 +46,10 @@ export const auth = createSlice({
 			action: PayloadAction<{
 				username: string;
 				email: string;
-				user_id: string;
-				pfp_url: string;
+				bio: string;
+				name: string;
+				id: string;
+				image: string;
 				access_token: string;
 				refresh_token: string;
 				roles: Array<string>;
@@ -55,8 +61,10 @@ export const auth = createSlice({
 					isAuth: true,
 					username: action.payload.username,
 					email: action.payload.email,
-					user_id: action.payload.user_id,
-					pfp_url: action.payload.pfp_url,
+					bio: action.payload.bio,
+					name: action.payload.name,
+					id: action.payload.id,
+					image: action.payload.image,
 					roles: action.payload.roles,
 					access_token: action.payload.access_token,
 					refresh_token: action.payload.refresh_token,
@@ -67,8 +75,10 @@ export const auth = createSlice({
 					isAuth: true,
 					username: action.payload.username,
 					email: action.payload.email,
-					user_id: action.payload.user_id,
-					pfp_url: action.payload.pfp_url,
+					bio: action.payload.bio,
+					name: action.payload.name,
+					id: action.payload.id,
+					image: action.payload.image,
 					roles: action.payload.roles,
 					access_token: action.payload.access_token,
 					refresh_token: action.payload.refresh_token,

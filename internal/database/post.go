@@ -16,7 +16,7 @@ func CreatePost(post *models.Post) (*models.Post, error) {
 
 func ReadPost(post_id string) (*models.Post, error) {
 	var post models.Post
-	res := DB.Find(&post, "post_id = ?", post_id)
+	res := DB.Find(&post, "id = ?", post_id)
 	if res.RowsAffected == 0 {
 		return nil, errors.New("post not found")
 	}
@@ -48,7 +48,7 @@ func ReadPostList() ([]*models.Post, error) {
 
 func UpdatePost(post *models.Post) (*models.Post, error) {
 	var updatePost models.Post
-	res := DB.Model(&updatePost).Where("post_id = ?", post.Post_Id).Updates(post)
+	res := DB.Model(&updatePost).Where("id = ?", post.Id).Updates(post)
 	if res.RowsAffected == 0 {
 		return &models.Post{}, errors.New("post not updated")
 	}
@@ -57,7 +57,7 @@ func UpdatePost(post *models.Post) (*models.Post, error) {
 
 func DeletePost(post_id string) error {
 	var deletePost models.Post
-	res := DB.Model(&deletePost).Where("post_id = ?", post_id).Delete(&deletePost)
+	res := DB.Model(&deletePost).Where("id = ?", post_id).Delete(&deletePost)
 	if res.RowsAffected == 0 {
 		return errors.New("post not deleted")
 	}

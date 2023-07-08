@@ -16,7 +16,7 @@ export default function MatchList() {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		setInterval(() => setLoading(false), 5000);
+		setInterval(() => setLoading(false), 1000);
 	}, []);
 	return (
 		<>

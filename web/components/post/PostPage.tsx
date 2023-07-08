@@ -57,6 +57,8 @@ import PostCardSkeleton from "../social/PostCardSkeleton";
 import { useEffect } from "react";
 import { Skeleton } from "../ui/skeleton";
 import CommentList from "./CommentList";
+import { SharePop } from "../social/SharePop";
+import { PostDropdown } from "../social/PostDropdown";
 
 const FormSchema = z.object({
 	comment: z
@@ -72,6 +74,9 @@ const FormSchema = z.object({
 const PostPage = (props: { postId: string }) => {
 	const { toast } = useToast();
 	const isAuth = useAppSelector((state) => state.persistedReducer.value.isAuth);
+	const app_user_id = useAppSelector(
+		(state) => state.persistedReducer.value.id
+	);
 
 	const {
 		data: post,
@@ -98,8 +103,8 @@ const PostPage = (props: { postId: string }) => {
 		if (data.comment) {
 			postComment({
 				content: data.comment,
-				post_id: post.post.post_id,
 				user_id: post.post.user_id,
+				post_id: post.post.id,
 			});
 		}
 	}
@@ -163,24 +168,25 @@ const PostPage = (props: { postId: string }) => {
 								<p>{post.post.content}</p>
 								<div className="flex">
 									<Button variant="ghost" size="sm">
-										{post.post.upvotes}
-										<ThumbsUpIcon className="h-4 w-4 ml-2" />
+										{post.post.upvotes > 0 ? (
+											<span className="mr-2">{post.post.upvotes}</span>
+										) : null}
+										<ThumbsUpIcon className="h-4 w-4" />
 									</Button>
 									<Button variant="ghost" size="sm">
-										{post.post.downvotes}
-										<ThumbsDownIcon className="h-4 w-4 ml-2" />
+										{post.post.downvotes > 0 ? (
+											<span className="mr-2">{post.post.downvotes}</span>
+										) : null}
+										<ThumbsDownIcon className="h-4 w-4" />
 									</Button>
-									<Button variant="ghost" size="sm">
-										<ForwardIcon className="h-4 w-4 mr-2" />
-										Share
-									</Button>
-									<Button variant="ghost" size="sm">
+									<SharePop postId={props.postId} />
+									{/* <Button variant="ghost" size="sm">
 										<SaveIcon className="h-4 w-4 mr-2" />
 										Save
-									</Button>
-									<Button variant="ghost" size="sm">
-										<MoreHorizontalIcon className="h-4 w-4" />
-									</Button>
+										</Button> */}
+									{app_user_id === post.post.user_id.toString() ? (
+										<PostDropdown />
+									) : null}
 								</div>
 								{isAuth ? (
 									<div>
@@ -233,13 +239,13 @@ const PostPage = (props: { postId: string }) => {
 								<div className="flex items-center">
 									<Avatar className="mr-2">
 										<AvatarImage
-											src={results.data.user.pfp_url}
+											src={results.data.user.image}
 											alt="ProfilePicture"
 										/>
 										<AvatarFallback>PF</AvatarFallback>
 									</Avatar>
 									<Link
-										href={`/profile/${results.data.user.user_id}`}
+										href={`/profile/${results.data.user.id}`}
 										className="font-semibold"
 									>
 										{results.data.user.username}

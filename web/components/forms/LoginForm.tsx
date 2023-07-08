@@ -97,8 +97,10 @@ export function LoginForm() {
 					setUser({
 						username: results.data.user.username,
 						email: results.data.user.email,
-						user_id: results.data.user.user_id,
-						pfp_url: results.data.user.pfp_url,
+						bio: results.data.user.bio,
+						name: results.data.user.name,
+						id: results.data.user.id,
+						image: results.data.user.image,
 						access_token: loginData.access_token,
 						refresh_token: loginData.refresh_token,
 						roles: results.data.user.roles.map((obj: any) => obj.rolename),
@@ -127,47 +129,6 @@ export function LoginForm() {
 					Enter your email below to login to your account
 				</CardDescription>
 			</CardHeader>
-			{/* <CardContent className="grid gap-4">
-				<div className="grid grid-cols-2 gap-6">
-					<Button variant="outline">
-						<Icons.gitHub className="mr-2 h-4 w-4" />
-						Github
-					</Button>
-					<Button variant="outline">
-						<Icons.google className="mr-2 h-4 w-4" />
-						Google
-					</Button>
-				</div>
-				<div className="relative">
-					<div className="absolute inset-0 flex items-center">
-						<span className="w-full border-t" />
-					</div>
-					<div className="relative flex justify-center text-xs uppercase">
-						<span className="bg-background px-2 text-muted-foreground">
-							Or continue with
-						</span>
-					</div>
-				</div>
-				<div className="grid gap-2">
-					<Label htmlFor="email">Email</Label>
-					<Input
-						id="email"
-						type="email"
-						placeholder="m@example.com"
-						onChange={(e) => setEmail(e.target.value)}
-					/>
-					{email}
-				</div>
-				<div className="grid gap-2">
-					<Label htmlFor="password">Password</Label>
-					<Input id="password" type="password" />
-				</div>
-			</CardContent>
-			<CardFooter>
-				<Button className="w-full" onClick={onClickLogIn}>
-					Sign In
-				</Button>
-			</CardFooter> */}
 
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">

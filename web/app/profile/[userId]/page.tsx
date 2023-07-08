@@ -1,7 +1,7 @@
 import ProfilePage from "@/components/profile/ProfilePage";
 
 export const metadata = {
-	title: process.env.NEXT_PUBLIC_APP_NAME + " - Profile",
+	title: "Profile • " + process.env.NEXT_PUBLIC_APP_NAME,
 	description: "Cricket Ball by Ball Commentary",
 };
 

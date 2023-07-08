@@ -35,13 +35,13 @@ export default function Comment(comment: any) {
 	} = useGetProfileQuery(comment.user_id);
 	return (
 		<>
-			<div className="space-y-2" key={comment.comment_id}>
+			<div className="space-y-2" key={comment.id}>
 				<div className="flex items-center">
 					{profileSuccess ? (
 						<>
 							<Avatar className="h-8 w-8 mr-2">
 								<AvatarImage
-									src={profileData.user.pfp_url}
+									src={profileData.user.image}
 									alt="ProfilePicture"
 								/>
 								<AvatarFallback>PF</AvatarFallback>

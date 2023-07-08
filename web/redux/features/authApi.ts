@@ -19,7 +19,7 @@ export const authApi = createApi({
 			query: (body: {
 				email: string;
 				password: string;
-				roles: [{ rolename: string }];
+				roles: [{ name: string }];
 			}) => {
 				return {
 					url: "api/v1/register",
@@ -30,10 +30,12 @@ export const authApi = createApi({
 		}),
 		updateUser: builder.mutation({
 			query: (body: {
-				user_id: string;
+				id: string;
+				name: string;
+				bio: string;
 				email: string;
 				username: string;
-				pfp_url: string;
+				image: string;
 			}) => {
 				return {
 					url: "api/v1/user",

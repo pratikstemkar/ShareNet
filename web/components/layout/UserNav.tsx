@@ -40,12 +40,8 @@ export function UserNav() {
 	const username = useAppSelector(
 		(state) => state.persistedReducer.value.username
 	);
-	const user_id = useAppSelector(
-		(state) => state.persistedReducer.value.user_id
-	);
-	const pfp_url = useAppSelector(
-		(state) => state.persistedReducer.value.pfp_url
-	);
+	const user_id = useAppSelector((state) => state.persistedReducer.value.id);
+	const pfp_url = useAppSelector((state) => state.persistedReducer.value.image);
 
 	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();

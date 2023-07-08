@@ -22,13 +22,14 @@ export default function ProfileAvatar(props: { userId: string }) {
 				</>
 			) : (
 				<>
-					<Avatar className="h-40 w-40 mr-5">
-						<AvatarImage src={data.user.pfp_url} alt="ProfilePicture" />
+					<Avatar className="h-40 w-40 mr-4">
+						<AvatarImage src={data.user.image} alt="ProfilePicture" />
 						<AvatarFallback>PC</AvatarFallback>
 					</Avatar>
 					<div>
-						<div className="text-lg font-extrabold">{data.user.username}</div>
-						<div className="text-sm">i am good for nothing</div>
+						<div className="text-2xl font-extrabold">{data.user.name}</div>
+						<div className="text-slate-500">@{data.user.username}</div>
+						<div className="text-sm mt-2">{data.user.bio}</div>
 					</div>
 				</>
 			)}

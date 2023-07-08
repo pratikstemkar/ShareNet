@@ -35,7 +35,9 @@ import { DialogClose } from "@radix-ui/react-dialog";
 const formSchema = z.object({
 	email: z.string().min(2).max(50).email(),
 	username: z.string(),
-	pfp_url: z.string(),
+	bio: z.string(),
+	name: z.string(),
+	image: z.string(),
 });
 
 export function EditProfile() {
@@ -43,12 +45,10 @@ export function EditProfile() {
 	const username = useAppSelector(
 		(state) => state.persistedReducer.value.username
 	);
-	const pfp_url = useAppSelector(
-		(state) => state.persistedReducer.value.pfp_url
-	);
-	const user_id = useAppSelector(
-		(state) => state.persistedReducer.value.user_id
-	);
+	const image = useAppSelector((state) => state.persistedReducer.value.image);
+	const id = useAppSelector((state) => state.persistedReducer.value.id);
+	const bio = useAppSelector((state) => state.persistedReducer.value.bio);
+	const name = useAppSelector((state) => state.persistedReducer.value.name);
 
 	const { toast } = useToast();
 
@@ -68,7 +68,9 @@ export function EditProfile() {
 		defaultValues: {
 			email,
 			username,
-			pfp_url,
+			image,
+			bio,
+			name,
 		},
 	});
 
@@ -76,12 +78,20 @@ export function EditProfile() {
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		// Do something with the form values.
 		// ✅ This will be type-safe and validated.
-		if (values.email && values.username && values.pfp_url) {
+		if (
+			values.email &&
+			values.username &&
+			values.image &&
+			values.bio &&
+			values.name
+		) {
 			updateUser({
-				user_id,
+				id: id,
 				username: values.username,
 				email: values.email,
-				pfp_url: values.pfp_url,
+				bio: values.bio,
+				name: values.name,
+				image: values.image,
 			});
 		}
 	}
@@ -143,6 +153,20 @@ export function EditProfile() {
 						/>
 						<FormField
 							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Name</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+									{/* <FormDescription>Password is saved in hash.</FormDescription> */}
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
 							name="username"
 							render={({ field }) => (
 								<FormItem>
@@ -157,10 +181,24 @@ export function EditProfile() {
 						/>
 						<FormField
 							control={form.control}
-							name="pfp_url"
+							name="bio"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Profile Picture</FormLabel>
+									<FormLabel>Bio</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+									{/* <FormDescription>Password is saved in hash.</FormDescription> */}
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="image"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Image</FormLabel>
 									<FormControl>
 										<Input {...field} />
 									</FormControl>

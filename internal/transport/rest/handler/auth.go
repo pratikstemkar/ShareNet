@@ -40,7 +40,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	user := models.User{Username: utils.ExtractUsername(body.Email), Email: body.Email, Password: string(hash), Roles: body.Roles, Pfp_Url: utils.GetEnvVariable("PFP")}
+	user := models.User{Username: utils.ExtractUsername(body.Email), Email: body.Email, Password: string(hash), Roles: body.Roles, Image: utils.GetEnvVariable("PFP")}
 	_, err = database.CreateUser(&user)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -116,14 +116,14 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	accessTokenString, err := services.CreateAccessToken(user.User_Id.String(), time.Minute*15)
+	accessTokenString, err := services.CreateAccessToken(user.Id.String(), time.Minute*15)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "access token not generated",
 		})
 		return
 	}
-	refreshTokenString, err := services.CreateRefreshToken(user.User_Id.String(), time.Hour*24*7)
+	refreshTokenString, err := services.CreateRefreshToken(user.Id.String(), time.Hour*24*7)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "refresh token not generated",

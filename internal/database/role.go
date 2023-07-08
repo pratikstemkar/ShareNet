@@ -17,7 +17,7 @@ func CreateRole(role *models.Role) (*models.Role, error) {
 
 func ReadRole(role_id string) (*models.Role, error) {
 	var role models.Role
-	res := DB.Preload("Users").Find(&role, "role_id = ?", role_id)
+	res := DB.Preload("Users").Find(&role, "id = ?", role_id)
 	if res.RowsAffected == 0 {
 		return nil, errors.New("role not found")
 	}
@@ -35,7 +35,7 @@ func ReadRoleList() ([]*models.Role, error) {
 
 func UpdateRole(role *models.Role) (*models.Role, error) {
 	var updateRole models.Role
-	res := DB.Model(&updateRole).Where("role_id = ?", role.Role_Id).Updates(role)
+	res := DB.Model(&updateRole).Where("id = ?", role.Id).Updates(role)
 	if res.RowsAffected == 0 {
 		return &models.Role{}, errors.New("role not updated")
 	}
@@ -44,7 +44,7 @@ func UpdateRole(role *models.Role) (*models.Role, error) {
 
 func DeleteRole(role_id string) error {
 	var deleteRole models.Role
-	res := DB.Model(&deleteRole).Where("role_id = ?", role_id).Delete(&deleteRole)
+	res := DB.Model(&deleteRole).Where("id = ?", role_id).Delete(&deleteRole)
 	if res.RowsAffected == 0 {
 		return errors.New("role not deleted")
 	}

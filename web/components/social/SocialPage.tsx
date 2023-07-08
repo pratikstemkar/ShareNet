@@ -19,9 +19,7 @@ export default function SocialPage() {
 	const router = useRouter();
 
 	const isAuth = useAppSelector((state) => state.persistedReducer.value.isAuth);
-	const pfp_url = useAppSelector(
-		(state) => state.persistedReducer.value.pfp_url
-	);
+	const image = useAppSelector((state) => state.persistedReducer.value.image);
 	const roles = useAppSelector((state) => state.persistedReducer.value.roles);
 
 	return (
@@ -33,7 +31,7 @@ export default function SocialPage() {
 						<CardContent className="mt-5">
 							<div className="flex space-x-2 items-center">
 								<Avatar className="h-8 w-8 mr-2">
-									<AvatarImage src={pfp_url} alt="ProfilePicture" />
+									<AvatarImage src={image} alt="ProfilePicture" />
 									<AvatarFallback>PC</AvatarFallback>
 								</Avatar>
 								<Input

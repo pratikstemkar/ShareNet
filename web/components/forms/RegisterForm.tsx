@@ -63,7 +63,7 @@ export function RegisterForm() {
 			registerUser({
 				email: values.email,
 				password: values.password,
-				roles: [{ rolename: "user" }],
+				roles: [{ name: "user" }],
 			});
 		}
 	}
@@ -78,7 +78,7 @@ export function RegisterForm() {
 		if (rSuccess) {
 			if (rData) {
 				console.log(rData);
-				router.push("/auth/login");
+				router.push("/login");
 				toast({
 					title: "User Registered Successfully!",
 				});

@@ -28,7 +28,7 @@ func CreateUser(user *models.User) (*models.User, error) {
 
 func ReadUser(user_id string) (*models.User, error) {
 	var user models.User
-	res := DB.Preload("Roles").Find(&user, "user_id = ?", user_id)
+	res := DB.Preload("Roles").Find(&user, "id = ?", user_id)
 	if res.RowsAffected == 0 {
 		return nil, errors.New("user not found")
 	}
@@ -37,7 +37,7 @@ func ReadUser(user_id string) (*models.User, error) {
 
 func ReadPublicUser(user_id string) (*models.User, error) {
 	var user models.User
-	res := DB.Select("User_Id, Username, Email, Pfp_Url").Preload("Roles").Find(&user, "user_id = ?", user_id)
+	res := DB.Select("Id, Username, Email, Image, Bio, Name").Preload("Roles").Find(&user, "id = ?", user_id)
 	if res.RowsAffected == 0 {
 		return nil, errors.New("user not found")
 	}
@@ -77,7 +77,7 @@ func UpdateUser(updates map[string]interface{}) (*models.User, error) {
 	// 	// fmt.Print(role)
 	// }
 	// }
-	res := DB.Model(&updateUser).Where("user_id = ?", updates["user_id"]).Updates(updates)
+	res := DB.Model(&updateUser).Where("id = ?", updates["id"]).Updates(updates)
 	if res.RowsAffected == 0 {
 		return &models.User{}, errors.New("user not updated")
 	}
@@ -86,7 +86,7 @@ func UpdateUser(updates map[string]interface{}) (*models.User, error) {
 
 func DeleteUser(user_id string) error {
 	var deleteUser models.User
-	res := DB.Model(&deleteUser).Where("user_id = ?", user_id).Delete(&deleteUser)
+	res := DB.Model(&deleteUser).Where("id = ?", user_id).Delete(&deleteUser)
 	_ = DB.Exec("DELETE FROM public.user_roles WHERE user_user_id = ?;", user_id)
 	if res.RowsAffected == 0 {
 		return errors.New("user not deleted")

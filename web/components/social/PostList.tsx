@@ -17,7 +17,7 @@ export default function PostList() {
 				</>
 			) : (
 				data?.post_list?.map((post: any) => (
-					<PostCard key={post.post_id} {...post} />
+					<PostCard key={post.id} {...post} />
 				))
 			)}
 			{isError ? <>Error occured while fetching posts.</> : null}

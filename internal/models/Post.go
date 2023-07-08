@@ -7,33 +7,32 @@ import (
 )
 
 type Post struct {
-	Post_Id    uuid.UUID `json:"post_id" gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
+	Id    uuid.UUID `json:"id" gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
 	Title      string    `json:"title"`
 	Content    string    `json:"content"`
-	User_Id  uuid.UUID `json:"user_id" gorm:"type:uuid;default:uuid_generate_v4()"`
+	User_Id  uuid.UUID `json:"user_id" gorm:"type:uuid"`
 	User     User      `gorm:"foreignKey:User_Id;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Score      int       `json:"score"`
 	Upvotes    int       `json:"upvotes"`
 	Downvotes  int       `json:"downvotes"`
 	CreatedAt  time.Time  
 	UpdatedAt  time.Time  
 	Comments   []Comment `json:"comments" gorm:"foreignkey:Post_Id;constraint:OnDelete:CASCADE;"`
-	CommentCount int       `json:"comment_count"`
-	IsDeleted  bool      `json:"is_deleted"`
+	Comment_Count int       `json:"comment_count"`
+	Is_Deleted  bool      `json:"isDeleted"`
 }
 
 type Comment struct {
-	Comment_Id uuid.UUID `json:"comment_id" gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
+	Id uuid.UUID `json:"id" gorm:"primaryKey;type:uuid;default:uuid_generate_v4()"`
 	Content    string    `json:"content"`
-	User_Id  uuid.UUID `json:"user_id" gorm:"type:uuid;default:uuid_generate_v4()"`
-	User     User      `gorm:"foreignKey:User_Id;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Post_Id    uuid.UUID `json:"post_id" gorm:"type:uuid;default:uuid_generate_v4()"`
-	Post       Post      `gorm:"foreignKey:Post_Id;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Parent_Id  uuid.UUID `json:"parent_id" gorm:"type:uuid;default:uuid_generate_v4()"`
+	User_Id  uuid.UUID `json:"user_id" gorm:"type:uuid"`
+	User     User      `gorm:"foreignKey:user_id;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Post_Id    uuid.UUID `json:"post_id" gorm:"type:uuid;"`
+	Post       Post      `gorm:"foreignKey:post_id;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Parent_Id  uuid.UUID `json:"parent_id" gorm:"type:uuid;"`
 	CreatedAt  time.Time  
 	UpdatedAt  time.Time  
 	Upvotes    int       `json:"upvotes"`
 	Downvotes  int       `json:"downvotes"`
-	ReplyCount int       `json:"reply_count"`
-	IsDeleted  bool      `json:"is_deleted"`
+	Reply_Count int       `json:"reply_count"`
+	Is_Deleted  bool      `json:"is_deleted"`
 }
