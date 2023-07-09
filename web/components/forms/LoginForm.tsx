@@ -1,6 +1,5 @@
 "use client";
 
-import { useCookies } from "react-cookie";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -36,15 +35,15 @@ import {
 } from "@/redux/features/authApi";
 import { useEffect, useState } from "react";
 import { setUser } from "@/redux/features/authSlice";
+import Link from "next/link";
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50).email(),
-	password: z.string().min(5).max(18),
+	password: z.string().min(8).max(18),
 });
 
 export function LoginForm() {
 	const dispatch = useDispatch<AppDispatch>();
-	const [cookie, setCookie] = useCookies();
 	const router = useRouter();
 	const { toast } = useToast();
 	const [
@@ -83,16 +82,6 @@ export function LoginForm() {
 		if (loginSuccess) {
 			if (results && results.data) {
 				console.log(results.data);
-				setCookie("access_token", loginData.access_token, {
-					path: "/",
-					maxAge: 3600 * 24,
-					sameSite: true,
-				});
-				setCookie("refresh_token", loginData.refresh_token, {
-					path: "/",
-					maxAge: 3600 * 24,
-					sameSite: true,
-				});
 				dispatch(
 					setUser({
 						username: results.data.user.username,
@@ -116,6 +105,7 @@ export function LoginForm() {
 
 		if (loginError) {
 			toast({
+				variant: "destructive",
 				title: "Login Failed!",
 			});
 		}
@@ -129,30 +119,29 @@ export function LoginForm() {
 					Enter your email below to login to your account
 				</CardDescription>
 			</CardHeader>
-
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-					<CardContent className="grid gap-4">
-						<div className="grid grid-cols-2 gap-6">
-							<Button variant="outline">
-								<Icons.gitHub className="mr-2 h-4 w-4" />
-								Github
-							</Button>
-							<Button variant="outline">
-								<Icons.google className="mr-2 h-4 w-4" />
-								Google
-							</Button>
-						</div>
-						<div className="relative">
-							<div className="absolute inset-0 flex items-center">
-								<span className="w-full border-t" />
-							</div>
-							<div className="relative flex justify-center text-xs uppercase">
-								<span className="bg-background px-2 text-muted-foreground">
-									Or continue with
-								</span>
-							</div>
-						</div>
+			<CardContent className="grid gap-4">
+				<div className="grid grid-cols-2 gap-6">
+					<Button variant="outline">
+						<Icons.gitHub className="mr-2 h-4 w-4" />
+						Github
+					</Button>
+					<Button variant="outline">
+						<Icons.google className="mr-2 h-4 w-4" />
+						Google
+					</Button>
+				</div>
+				<div className="relative">
+					<div className="absolute inset-0 flex items-center">
+						<span className="w-full border-t" />
+					</div>
+					<div className="relative flex justify-center text-xs uppercase">
+						<span className="bg-background px-2 text-muted-foreground">
+							Or continue with
+						</span>
+					</div>
+				</div>
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
 						<FormField
 							control={form.control}
 							name="email"
@@ -183,14 +172,18 @@ export function LoginForm() {
 								</FormItem>
 							)}
 						/>
-					</CardContent>
-					<CardFooter>
 						<Button type="submit" className="w-full">
 							Sign In
 						</Button>
-					</CardFooter>
-				</form>
-			</Form>
+					</form>
+				</Form>
+			</CardContent>
+			<CardFooter className="text-sm ">
+				Don&apos;t have an account?{" "}
+				<Link href="/register" className="text-blue-500 ml-2">
+					Sign Up
+				</Link>
+			</CardFooter>
 		</Card>
 	);
 }

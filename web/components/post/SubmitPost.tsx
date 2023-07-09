@@ -37,6 +37,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/store";
 import { usePostPostMutation } from "@/redux/features/apiSlice";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const FormSchema = z.object({
 	postTitle: z
@@ -79,6 +80,7 @@ const ImgFormSchema = z.object({
 			message: "Title must not be longer than 100 characters.",
 		}),
 	postImg: z.string().min(5),
+	postCaption: z.string(),
 });
 
 const SubmitPost = () => {
@@ -126,6 +128,9 @@ const SubmitPost = () => {
 				title: data.postTitle,
 				content: data.postText,
 				user_id: id,
+				link: "",
+				image: "",
+				caption: "",
 			});
 		}
 	}
@@ -145,24 +150,24 @@ const SubmitPost = () => {
 	}, [postLoading]);
 
 	function linkOnSubmit(data: z.infer<typeof LinkFormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">{JSON.stringify(data, null, 2)}</code>
-				</pre>
-			),
+		postPost({
+			title: data.postTitle,
+			content: "",
+			user_id: id,
+			link: data.postLink,
+			image: "",
+			caption: "",
 		});
 	}
 
 	function imgOnSubmit(data: z.infer<typeof ImgFormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">{JSON.stringify(data, null, 2)}</code>
-				</pre>
-			),
+		postPost({
+			title: data.postTitle,
+			content: "",
+			user_id: id,
+			link: "",
+			image: data.postImg,
+			caption: data.postCaption,
 		});
 	}
 
@@ -274,9 +279,37 @@ const SubmitPost = () => {
 														{/* <FormLabel>Comment</FormLabel> */}
 														<FormControl>
 															<Input
-																type="file"
+																type="text"
+																placeholder="Image Link"
 																{...field}
-																onChange={imageChange}
+															/>
+														</FormControl>
+														<FormDescription>
+															Post only{" "}
+															<Link
+																href="https://www.tenor.com"
+																target="_blank"
+																className="text-blue-500 hover:underline"
+															>
+																tenor.com
+															</Link>{" "}
+															image links.
+														</FormDescription>
+														<FormMessage />
+													</FormItem>
+												)}
+											/>
+											<FormField
+												control={imgForm.control}
+												name="postCaption"
+												render={({ field }) => (
+													<FormItem>
+														{/* <FormLabel>Comment</FormLabel> */}
+														<FormControl>
+															<Input
+																type="text"
+																placeholder="Image Caption"
+																{...field}
 															/>
 														</FormControl>
 														{/* <FormDescription>

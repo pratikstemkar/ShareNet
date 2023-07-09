@@ -45,11 +45,15 @@ import { Skeleton } from "../ui/skeleton";
 import { SharePop } from "./SharePop";
 import { Badge } from "../ui/badge";
 import { PostDropdown } from "./PostDropdown";
+import Image from "next/image";
 
 interface PostCardProps {
 	id: number;
 	title: string;
 	content: string;
+	image: string;
+	caption: string;
+	link: string;
 	user_id: number;
 	CreatedAt: string;
 	comment_count: number;
@@ -61,6 +65,9 @@ export default function PostCard({
 	id,
 	title,
 	content,
+	image,
+	caption,
+	link,
 	user_id,
 	CreatedAt,
 	comment_count,
@@ -168,14 +175,34 @@ export default function PostCard({
 				</CardTitlePost>
 			</CardHeaderPost>
 			<CardContentPost>
-				{limitParagraph(content, 500)}
-				{content.length >= 500 ? (
-					<Link
-						href={`/post/${id}`}
-						className="ml-2 text-indigo-500 hover:underline"
-					>
-						Read More
-					</Link>
+				{content !== "" ? (
+					<>
+						{limitParagraph(content, 500)}
+						{content.length >= 500 ? (
+							<Link
+								href={`/post/${id}`}
+								className="ml-2 text-indigo-500 hover:underline"
+							>
+								Read More
+							</Link>
+						) : null}
+					</>
+				) : null}
+				{image !== "" ? (
+					<>
+						<Image src={image} alt="asda" height={1000} width={1000} />{" "}
+					</>
+				) : null}
+				{link !== "" ? (
+					<>
+						<Link
+							href={link}
+							className="text-blue-500 hover:underline"
+							target="_blank"
+						>
+							{link}
+						</Link>
+					</>
 				) : null}
 			</CardContentPost>
 			<CardFooterPost>
@@ -203,7 +230,7 @@ export default function PostCard({
 						<SaveIcon className="h-4 w-4 mr-2" />
 						Save
 					</Button> */}
-					{app_user_id === user_id.toString() ? <PostDropdown /> : null}
+					{/* {app_user_id === user_id.toString() ? <PostDropdown /> : null} */}
 				</div>
 			</CardFooterPost>
 		</CardPost>

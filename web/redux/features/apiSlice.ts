@@ -17,7 +17,14 @@ export const postApi = createApi({
 			query: (userId) => `api/v1/profile/${userId}`,
 		}),
 		postPost: builder.mutation({
-			query: (body: { title: string; content: string; user_id: string }) => {
+			query: (body: {
+				title: string;
+				content: string;
+				user_id: string;
+				link: string;
+				image: string;
+				caption: string;
+			}) => {
 				return {
 					url: "api/v1/post",
 					method: "post",

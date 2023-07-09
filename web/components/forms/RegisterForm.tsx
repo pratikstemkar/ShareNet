@@ -31,10 +31,11 @@ import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
 import { useRegisterUserMutation } from "@/redux/features/authApi";
 import { useEffect } from "react";
+import Link from "next/link";
 
 const formSchema = z.object({
 	email: z.string().min(2).max(50).email(),
-	password: z.string().min(5).max(18),
+	password: z.string().min(8).max(18),
 });
 
 export function RegisterForm() {
@@ -71,6 +72,7 @@ export function RegisterForm() {
 	useEffect(() => {
 		if (rError) {
 			toast({
+				variant: "destructive",
 				title: "Registration Failed!",
 			});
 		}
@@ -94,29 +96,30 @@ export function RegisterForm() {
 					Enter your email below to create your account
 				</CardDescription>
 			</CardHeader>
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-					<CardContent className="grid gap-4">
-						<div className="grid grid-cols-2 gap-6">
-							<Button variant="outline">
-								<Icons.gitHub className="mr-2 h-4 w-4" />
-								Github
-							</Button>
-							<Button variant="outline">
-								<Icons.google className="mr-2 h-4 w-4" />
-								Google
-							</Button>
-						</div>
-						<div className="relative">
-							<div className="absolute inset-0 flex items-center">
-								<span className="w-full border-t" />
-							</div>
-							<div className="relative flex justify-center text-xs uppercase">
-								<span className="bg-background px-2 text-muted-foreground">
-									Or continue with
-								</span>
-							</div>
-						</div>
+
+			<CardContent className="grid gap-4">
+				<div className="grid grid-cols-2 gap-6">
+					<Button variant="outline">
+						<Icons.gitHub className="mr-2 h-4 w-4" />
+						Github
+					</Button>
+					<Button variant="outline">
+						<Icons.google className="mr-2 h-4 w-4" />
+						Google
+					</Button>
+				</div>
+				<div className="relative">
+					<div className="absolute inset-0 flex items-center">
+						<span className="w-full border-t" />
+					</div>
+					<div className="relative flex justify-center text-xs uppercase">
+						<span className="bg-background px-2 text-muted-foreground">
+							Or continue with
+						</span>
+					</div>
+				</div>
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
 						<FormField
 							control={form.control}
 							name="email"
@@ -147,14 +150,18 @@ export function RegisterForm() {
 								</FormItem>
 							)}
 						/>
-					</CardContent>
-					<CardFooter>
 						<Button type="submit" className="w-full">
 							Create Account
 						</Button>
-					</CardFooter>
-				</form>
-			</Form>
+					</form>
+				</Form>
+			</CardContent>
+			<CardFooter className="text-sm ">
+				Already signed up?{" "}
+				<Link href="/login" className="text-blue-500 ml-2">
+					Sign In
+				</Link>
+			</CardFooter>
 		</Card>
 	);
 }

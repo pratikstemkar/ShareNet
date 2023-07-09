@@ -60,6 +60,7 @@ import { Skeleton } from "../ui/skeleton";
 import CommentList from "./CommentList";
 import { SharePop } from "../social/SharePop";
 import { PostDropdown } from "../social/PostDropdown";
+import Image from "next/image";
 
 const FormSchema = z.object({
 	comment: z
@@ -166,7 +167,28 @@ const PostPage = (props: { postId: string }) => {
 								<CardTitle className="text-2xl">{post.post.title}</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-5">
-								<p>{post.post.content}</p>
+								{post.post.content !== "" ? <p>{post.post.content}</p> : null}
+								{post.post.image !== "" ? (
+									<div className="flex flex-col justify-center">
+										<Image
+											src={post.post.image}
+											height={1000}
+											width={1000}
+											alt="asd"
+										/>
+										<span className="text-sm">{post.post.caption}</span>
+									</div>
+								) : null}
+								{post.post.link !== "" ? (
+									<p>
+										<Link
+											href={post.post.link}
+											className="text-blue-500 hover:underline"
+										>
+											{post.post.link}
+										</Link>
+									</p>
+								) : null}
 								<div className="flex">
 									<Button variant="ghost" size="sm">
 										{post.post.upvotes > 0 ? (
@@ -185,9 +207,9 @@ const PostPage = (props: { postId: string }) => {
 										<SaveIcon className="h-4 w-4 mr-2" />
 										Save
 										</Button> */}
-									{app_user_id === post.post.user_id.toString() ? (
+									{/* {app_user_id === post.post.user_id.toString() ? (
 										<PostDropdown />
-									) : null}
+									) : null} */}
 								</div>
 								{isAuth ? (
 									<div>
