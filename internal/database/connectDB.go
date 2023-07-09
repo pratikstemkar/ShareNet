@@ -40,7 +40,7 @@ func ConnectDB() *gorm.DB {
 
    fmt.Println("DB connected!")
 
-   DB.AutoMigrate(models.User{}, models.Role{}, models.Post{}, models.Comment{})
+   DB.AutoMigrate(models.User{}, models.Role{}, models.Post{}, models.Comment{}, models.Upvote{}, models.Downvote{})
 
    return DB
 }

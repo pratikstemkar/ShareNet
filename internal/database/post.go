@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 
+	"github.com/jinzhu/gorm"
 	"github.com/pratikstemkar/matchup/internal/models"
 )
 
@@ -53,6 +54,30 @@ func UpdatePost(post *models.Post) (*models.Post, error) {
 		return &models.Post{}, errors.New("post not updated")
 	}
 	return &updatePost, nil
+}
+
+func UpvotePost(upvote *models.Upvote) (*models.Upvote, error) {
+	res := DB.Create(upvote)
+	if res.RowsAffected == 0 {
+		return &models.Upvote{}, errors.New("upvote not created")
+	}
+	err := DB.Model(&models.Post{}).Where("id = ?", upvote.Post_Id).UpdateColumn("upvotes", gorm.Expr("upvotes + ?", 1)).Error
+	if err != nil {
+		return nil, err
+	}
+	return upvote, nil
+}
+
+func DownvotePost(downvote *models.Downvote) (*models.Downvote, error) {
+	res := DB.Create(downvote)
+	if res.RowsAffected == 0 {
+		return &models.Downvote{}, errors.New("downvote not created")
+	}
+	err := DB.Model(&models.Post{}).Where("id = ?", downvote.Post_Id).UpdateColumn("downvotes", gorm.Expr("downvotes + ?", 1)).Error
+	if err != nil {
+		return nil, err
+	}
+	return downvote, nil
 }
 
 func DeletePost(post_id string) error {

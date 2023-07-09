@@ -105,6 +105,54 @@ func PutPost(c *gin.Context) {
 	})
 }
 
+// @route PUT /api/v1/post/:id/upvote
+// @desc Upvote post by id
+// @access Public
+func PutUpvotePost(c *gin.Context) {
+	var upvote models.Upvote
+	if err := c.ShouldBindJSON(&upvote); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+	res, err := database.UpvotePost(&upvote)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "post with upvoted",
+		"res": res,
+	})
+}
+
+// @route PUT /api/v1/post/:id/downvote
+// @desc Downvote post by id
+// @access Public
+func PutDownvotePost(c *gin.Context) {
+	var downvote models.Downvote
+	if err := c.ShouldBindJSON(&downvote); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+	res, err := database.DownvotePost(&downvote)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "post with downvoted",
+		"res": res,
+	})
+}
+
 // @route DELETE /api/v1/post/:id
 // @desc Delete a post by id
 // @access Public

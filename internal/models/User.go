@@ -20,6 +20,7 @@ type User struct {
 	Comments []Comment `json:"comments" gorm:"foreignKey:user_id"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	Is_Deleted  bool `json:"is_deleted"`
 }
 
 // Role Model

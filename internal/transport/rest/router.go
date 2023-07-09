@@ -42,6 +42,9 @@ func SetupRouter() *gin.Engine {
 	r.PUT("/api/v1/post", handler.PutPost)
 	r.DELETE("/api/v1/post/:id", handler.DeletePost)
 
+	r.POST("/api/v1/post/upvote", handler.PutUpvotePost)
+	r.POST("/api/v1/post/downvote", handler.PutDownvotePost)
+
 	// COMMENT
 	r.POST("/api/v1/comment", handler.PostComment)
 	r.GET("/api/v1/comment/:id", handler.GetComment)
