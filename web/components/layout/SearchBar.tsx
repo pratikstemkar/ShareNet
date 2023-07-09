@@ -29,7 +29,7 @@ export function SearchBar() {
 				<PopoverTrigger asChild>
 					<CommandInput placeholder="Type a command or search..." />
 				</PopoverTrigger>
-				<PopoverContent className="min-w-5xl bg-slate-950 border-2 rounded-sm mt-1">
+				<PopoverContent className="min-w-5xl dark:bg-slate-500 bg-white border-2 rounded-md mt-1 shadow-md">
 					<div>
 						<CommandList className="z-20">
 							<CommandEmpty>No results found.</CommandEmpty>

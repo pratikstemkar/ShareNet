@@ -20,11 +20,11 @@ const Navbar = () => {
 				<h1 className="text-3xl font-extrabold leading-none tracking-tight hover:text-indigo-500 flex items-center">
 					<Link href="/">
 						<Image
-							src="/cricket-ball.png"
+							src="/cricket.png"
 							height={30}
 							width={30}
 							alt="logo"
-							className="dark:invert mr-2 hover:cursor-pointer"
+							className="mr-1 hover:cursor-pointer"
 						/>
 					</Link>
 					<Link href="/">{process.env.NEXT_PUBLIC_APP_NAME}</Link>
@@ -38,7 +38,6 @@ const Navbar = () => {
 				<div className="space-x-5 items-center flex">
 					{isAuth ? (
 						<>
-							<SearchBar />
 							<NotiPop />
 							<UserNav />
 						</>
