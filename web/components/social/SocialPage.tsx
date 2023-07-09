@@ -65,19 +65,6 @@ export default function SocialPage() {
 					</Card>
 				)}
 				<Card>
-					<CardHeader className="font-semibold">
-						Welcome to {process.env.NEXT_PUBLIC_APP_NAME}!
-					</CardHeader>
-					<CardContent className="text-sm">
-						Come here to check in with your favorite teams.
-					</CardContent>
-					<CardFooter>
-						<Button className="w-full" size="sm">
-							Create Team
-						</Button>
-					</CardFooter>
-				</Card>
-				<Card>
 					<CardHeader className="font-semibold">Site Links</CardHeader>
 					<CardContent className="text-sm ">
 						<div className="grid grid-cols-2 ">

@@ -50,7 +50,27 @@ export function convertTimestampToReadableTime(timestamp: string): string {
 	});
 }
 
+export function convertTimestampToReadableTimeProfile(
+	timestamp: string
+): string {
+	const date = new Date(timestamp);
+	return date.toLocaleString("en-US", {
+		weekday: "long",
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
+}
+
 export function convertTimestampToRelativeTime(timestamp: string): string {
 	const date = new Date(timestamp);
 	return formatDistanceToNow(date, { addSuffix: true });
+}
+
+export function limitParagraph(paragraph: string, limit: number): string {
+	if (paragraph.length <= limit) {
+		return paragraph;
+	} else {
+		return paragraph.slice(0, limit) + "...";
+	}
 }

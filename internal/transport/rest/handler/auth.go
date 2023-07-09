@@ -40,7 +40,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	user := models.User{Username: utils.ExtractUsername(body.Email), Email: body.Email, Password: string(hash), Roles: body.Roles, Image: utils.GetEnvVariable("PFP")}
+	user := models.User{Name: utils.ExtractUsername(body.Email), Username: utils.ExtractUsername(body.Email), Email: body.Email, Password: string(hash), Roles: body.Roles, Image: utils.GetEnvVariable("PFP")}
 	_, err = database.CreateUser(&user)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

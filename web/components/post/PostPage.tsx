@@ -50,6 +50,7 @@ import {
 } from "@/redux/features/apiSlice";
 import {
 	convertTimestampToReadableTime,
+	convertTimestampToReadableTimeProfile,
 	convertTimestampToRelativeTime,
 } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
@@ -103,7 +104,7 @@ const PostPage = (props: { postId: string }) => {
 		if (data.comment) {
 			postComment({
 				content: data.comment,
-				user_id: post.post.user_id,
+				user_id: app_user_id,
 				post_id: post.post.id,
 			});
 		}
@@ -244,23 +245,26 @@ const PostPage = (props: { postId: string }) => {
 										/>
 										<AvatarFallback>PF</AvatarFallback>
 									</Avatar>
-									<Link
-										href={`/profile/${results.data.user.id}`}
-										className="font-semibold"
-									>
-										{results.data.user.username}
-									</Link>
+									<div className="flex flex-col">
+										<Link
+											href={`/profile/${results.data.user.id}`}
+											className="font-semibold"
+										>
+											{results.data.user.name}
+										</Link>
+										<span className="text-slate-500 font-mono text-sm">
+											@{results.data.user.username}
+										</span>
+									</div>
 								</div>
-								<p className="text-sm">
-									Ironic, satirical memes about Asia & its people. The sub is
-									strictly based on serving as entertainment and does not
-									condone any form of racism, homophobia, extremism or
-									hyper-nationalism.{" "}
-								</p>
+								<p className="text-sm">{results.data?.user.bio}</p>
 								<div className="flex items-center pt-2">
 									<CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
 									<span className="text-xs text-muted-foreground">
-										Created December 2021
+										Joined{" "}
+										{convertTimestampToReadableTimeProfile(
+											results.data?.user.CreatedAt
+										)}
 									</span>
 								</div>
 								<div className="p-2 flex justify-center">

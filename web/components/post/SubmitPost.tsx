@@ -42,18 +42,18 @@ const FormSchema = z.object({
 	postTitle: z
 		.string()
 		.min(5, {
-			message: "Title must be at least 10 characters.",
+			message: "Title must be at least 5 characters.",
 		})
-		.max(160, {
-			message: "Title must not be longer than 30 characters.",
+		.max(100, {
+			message: "Title must not be longer than 100 characters.",
 		}),
 	postText: z
 		.string()
 		.min(10, {
 			message: "Post must be at least 10 characters.",
 		})
-		.max(500, {
-			message: "Post must not be longer than 500 characters.",
+		.max(5000, {
+			message: "Post must not be longer than 5000 characters.",
 		}),
 });
 
@@ -61,10 +61,10 @@ const LinkFormSchema = z.object({
 	postTitle: z
 		.string()
 		.min(5, {
-			message: "Title must be at least 10 characters.",
+			message: "Title must be at least 5 characters.",
 		})
-		.max(160, {
-			message: "Title must not be longer than 30 characters.",
+		.max(100, {
+			message: "Title must not be longer than 100 characters.",
 		}),
 	postLink: z.string().min(5).url(),
 });
@@ -73,10 +73,10 @@ const ImgFormSchema = z.object({
 	postTitle: z
 		.string()
 		.min(5, {
-			message: "Title must be at least 10 characters.",
+			message: "Title must be at least 5 characters.",
 		})
-		.max(160, {
-			message: "Title must not be longer than 30 characters.",
+		.max(100, {
+			message: "Title must not be longer than 100 characters.",
 		}),
 	postImg: z.string().min(5),
 });

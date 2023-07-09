@@ -37,7 +37,7 @@ func ReadUser(user_id string) (*models.User, error) {
 
 func ReadPublicUser(user_id string) (*models.User, error) {
 	var user models.User
-	res := DB.Select("Id, Username, Email, Image, Bio, Name").Preload("Roles").Find(&user, "id = ?", user_id)
+	res := DB.Select("Id, Username, Email, Image, Bio, Name, Created_At").Preload("Roles").Find(&user, "id = ?", user_id)
 	if res.RowsAffected == 0 {
 		return nil, errors.New("user not found")
 	}

@@ -9,6 +9,7 @@ import {
 import {
 	CalendarIcon,
 	ForwardIcon,
+	MessageSquareIcon,
 	MoreHorizontalIcon,
 	SaveIcon,
 	ThumbsDownIcon,
@@ -34,7 +35,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
 	convertTimestampToReadableTime,
+	convertTimestampToReadableTimeProfile,
 	convertTimestampToRelativeTime,
+	limitParagraph,
 } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { useGetProfileQuery } from "@/redux/features/apiSlice";
@@ -96,29 +99,32 @@ export default function PostCard({
 									href={`/profile/${user_id}`}
 									className="mr-2 dark:text-white text-black hover:underline"
 								>
-									{userData.user.username}
+									{userData.user.name}
 								</Link>
 							</HoverCardTrigger>
 							<HoverCardContent className="w-80 hover:cursor-default">
-								<div className="flex justify-between space-x-4">
+								<div className="flex  space-x-4">
 									<Avatar>
 										<AvatarImage src={userData.user.image} />
 										<AvatarFallback>VC</AvatarFallback>
 									</Avatar>
 
-									<div className="space-y-2">
+									<div className="space-y-2 w-full">
 										<div className="grid grid-cols-2">
-											<h4 className="text-sm font-semibold">
-												{userData.user.username}
-											</h4>
+											<div>
+												<h4 className="text-sm font-semibold">
+													{userData.user.name}
+												</h4>
+												<span className="text-sm font-mono text-slate-500">
+													@{userData.user.username}
+												</span>
+											</div>
 											<div className="text-sm">
 												<span className="font-semibold">143k</span>{" "}
 												<span className="text-slate-500">members</span>
 											</div>
 										</div>
-										{/* <p className="text-sm">
-											The React Framework – created and maintained by @vercel.
-										</p> */}
+										<p className="text-sm">{userData.user.bio}</p>
 										<Button className="rounded-full w-full mt-4" size="sm">
 											Follow
 										</Button>
@@ -126,7 +132,7 @@ export default function PostCard({
 											<CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
 											<span className="text-xs text-muted-foreground">
 												Joined{" "}
-												{convertTimestampToReadableTime(
+												{convertTimestampToReadableTimeProfile(
 													userData.user.CreatedAt
 												)}
 											</span>
@@ -141,7 +147,7 @@ export default function PostCard({
 							{user_id}
 						</Link>{" "}
 					</span> */}
-
+						<span className="mr-2">@{userData.user.username}</span>
 						<TooltipProvider>
 							<Tooltip>
 								<TooltipTrigger>
@@ -161,14 +167,23 @@ export default function PostCard({
 					{title}
 				</CardTitlePost>
 			</CardHeaderPost>
-			<CardContentPost>{content}</CardContentPost>
+			<CardContentPost>
+				{limitParagraph(content, 500)}
+				{content.length >= 500 ? (
+					<Link
+						href={`/post/${id}`}
+						className="ml-2 text-indigo-500 hover:underline"
+					>
+						Read More
+					</Link>
+				) : null}
+			</CardContentPost>
 			<CardFooterPost>
 				<div className="flex items-center">
 					<Button variant="ghost" size="sm">
 						{upvotes > 0 ? <span className="mr-2">{upvotes}</span> : null}
 						<ThumbsUpIcon className="h-4 w-4" />
 					</Button>
-					<span className="font-mono">{upvotes - downvotes}</span>
 					<Button variant="ghost" size="sm">
 						{downvotes > 0 ? <span className="mr-2">{downvotes}</span> : null}
 						<ThumbsDownIcon className="h-4 w-4" />
@@ -178,7 +193,10 @@ export default function PostCard({
 						size="sm"
 						onClick={() => router.push(`/post/${id}`)}
 					>
-						{comment_count} Comment{comment_count > 1 ? "s" : null}
+						<MessageSquareIcon className="h-4 w-4 mr-2" />
+						<span>
+							{comment_count} Comment{comment_count > 1 ? "s" : null}
+						</span>
 					</Button>
 					<SharePop postId={id.toString()} />
 					{/* <Button variant="ghost" size="sm">

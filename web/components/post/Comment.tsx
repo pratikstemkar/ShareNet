@@ -8,6 +8,11 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Separator } from "../ui/separator";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +26,7 @@ import {
 } from "lucide-react";
 import {
 	convertTimestampToReadableTime,
+	convertTimestampToReadableTimeProfile,
 	convertTimestampToRelativeTime,
 } from "@/lib/utils";
 import { useGetProfileQuery } from "@/redux/features/apiSlice";
@@ -46,9 +52,57 @@ export default function Comment(comment: any) {
 								/>
 								<AvatarFallback>PF</AvatarFallback>
 							</Avatar>
-							<Link href="/profile" className="mr-2 hover:underline">
-								{profileData.user.username}
-							</Link>
+							<HoverCard>
+								<HoverCardTrigger asChild>
+									<Link
+										href={`/profile/${comment.user_id}`}
+										className="mr-2 dark:text-white text-black hover:underline"
+									>
+										{profileData.user.name}
+									</Link>
+								</HoverCardTrigger>
+								<HoverCardContent className="w-80 hover:cursor-default">
+									<div className="flex  space-x-4">
+										<Avatar>
+											<AvatarImage src={profileData.user.image} />
+											<AvatarFallback>VC</AvatarFallback>
+										</Avatar>
+
+										<div className="space-y-2 w-full">
+											<div className="grid grid-cols-2">
+												<div>
+													<h4 className="text-sm font-semibold">
+														{profileData.user.name}
+													</h4>
+													<span className="text-sm font-mono text-slate-500">
+														@{profileData.user.username}
+													</span>
+												</div>
+												<div className="text-sm">
+													<span className="font-semibold">143k</span>{" "}
+													<span className="text-slate-500">members</span>
+												</div>
+											</div>
+											<p className="text-sm">{profileData.user.bio}</p>
+											<Button className="rounded-full w-full mt-4" size="sm">
+												Follow
+											</Button>
+											<div className="flex items-center pt-2">
+												<CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
+												<span className="text-xs text-muted-foreground">
+													Joined{" "}
+													{convertTimestampToReadableTimeProfile(
+														profileData.user.CreatedAt
+													)}
+												</span>
+											</div>
+										</div>
+									</div>
+								</HoverCardContent>
+							</HoverCard>
+							<span className="text-slate-500 mr-2">
+								@{profileData.user.username}
+							</span>
 						</>
 					) : (
 						<>
