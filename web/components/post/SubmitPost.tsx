@@ -33,11 +33,12 @@ import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { FileTextIcon, ImageIcon, LinkIcon, Trash2Icon } from "lucide-react";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { Input } from "../ui/input";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useAppSelector } from "@/redux/store";
 import { usePostPostMutation } from "@/redux/features/apiSlice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import JoditEditor from "jodit-react";
 
 const FormSchema = z.object({
 	postTitle: z
@@ -88,6 +89,14 @@ const SubmitPost = () => {
 	const { toast } = useToast();
 	const id = useAppSelector((state) => state.persistedReducer.value.id);
 	const router = useRouter();
+	const editor = useRef(null);
+	const [content, setContent] = useState("");
+
+	const config = {
+		readonly: false, // all options from https://xdsoft.net/jodit/docs/,
+		placeholder: "Start typings...",
+		theme: "dark",
+	};
 
 	const [
 		postPost,

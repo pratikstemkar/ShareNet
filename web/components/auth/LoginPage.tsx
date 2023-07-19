@@ -3,12 +3,12 @@ import { LoginForm } from "@/components/forms/LoginForm";
 import { useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
+const LoginPage = () => {
 	const isAuth = useAppSelector((state) => state.persistedReducer.value.isAuth);
 	const router = useRouter();
 
 	if (isAuth) {
-		return router.push("/");
+		router.push("/");
 	}
 
 	return (
@@ -36,4 +36,6 @@ export default function LoginPage() {
 			</div>
 		</main>
 	);
-}
+};
+
+export default LoginPage;
