@@ -20,7 +20,7 @@ const Navbar = () => {
 				<h1 className="text-3xl font-extrabold leading-none tracking-tight hover:text-indigo-500 flex items-center">
 					<Link href="/">
 						<Image
-							src="/cricket.png"
+							src="/share.png"
 							height={30}
 							width={30}
 							alt="logo"
@@ -38,7 +38,7 @@ const Navbar = () => {
 				<div className="space-x-5 items-center flex">
 					{isAuth ? (
 						<>
-							<NotiPop />
+							{/* <NotiPop /> */}
 							<UserNav />
 						</>
 					) : (

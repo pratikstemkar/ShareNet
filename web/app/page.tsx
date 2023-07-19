@@ -11,8 +11,6 @@ export default function Page() {
 	return (
 		<main className="flex flex-col items-center justify-center max-w-5xl m-auto mt-5">
 			<div className="w-full items-center space-y-5">
-				<MatchList />
-				<Separator />
 				<SocialPage />
 			</div>
 		</main>
