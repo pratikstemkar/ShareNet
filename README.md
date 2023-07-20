@@ -1,21 +1,24 @@
-# MatchUp
+# ShareNet
 
-![Main-Screenshot](/docs/img/main.png)
+[Visit Site](https://sharenet.vercel.app)
+<br />
+Social Network for long form content. Share everything you want without any restrictions. Engage with your own community and stay safe.
 
 ## Requirements
 
 - Go 1.20
-- Node
+- Node 18
 
 ## Usage
 
-Clone it!
-
 ```
-git clone https://github.com/pratikstemkar/matchup.git
+git clone https://github.com/pratikstemkar/sharenet.git
+cd sharenet
 go mod tidy
+go run .
 cd web
 npm i
+npm run dev
 ```
 
 ## Tasklist
@@ -26,20 +29,14 @@ npm i
 - [x] Create a basic UI for Matches
 - [x] Create Auth UI
 - [x] Create Social UI
-- [ ] Setup Backend Project
-- [ ] Develop Auth API
+- [x] Setup Backend Project
+- [x] Develop Auth API
 - [ ] OAuth in App
-- [ ] Session Management in Frontend
-- [ ] Database Setup
-- [ ] Match Details CLI
-- [ ] Match Commentary Live
+- [x] Session Management in Frontend
+- [x] Database Setup
 - [ ] Social API Setup
-
-## Backend
-
-- Start server - `go run .`
-
-## Frontend
-
-- Go to web folder - `cd web`
-- Start server - `npm run dev`
+- [ ] Post upvote
+- [ ] User post options
+- [ ] Pro user addition
+- [ ] Stripe API integration
+- [ ] User account setting
